@@ -13,7 +13,7 @@ const StudentsSide = ({ courses }: any) => {
 
          <div className="mt-[1rem]">
             {courses.map((course) => (
-               <Card className="p-3">
+               <div className="p-3 border-b">
                   <CardTitle className="leading-relaxed">{course.title}</CardTitle>
                   <CardDescription className="leading-relaxed">
                      {course.description}
@@ -24,7 +24,7 @@ const StudentsSide = ({ courses }: any) => {
                   >
                      <User /> View Students
                   </Button>
-               </Card>
+               </div>
             ))}
          </div>
       </div>

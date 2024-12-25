@@ -5,12 +5,13 @@ import Category from "./Charts/Category";
 const OverviewMain = async () => {
    const response = await getAllCoursesByUser();
    const courses = response.courses;
-   console.log(courses);
-   const category = courses?.prerequisites;
 
-   console.log(category);
-
-   return <div>{/* <Category categoryData={category} /> */}</div>;
+   return (
+      <div>
+         <h1>Course Analytics</h1>
+         <Category categoryData={courses} />
+      </div>
+   );
 };
 
 export default OverviewMain;

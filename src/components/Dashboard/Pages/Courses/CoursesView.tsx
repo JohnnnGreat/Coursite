@@ -5,14 +5,12 @@ import {
    DropdownMenu,
    DropdownMenuContent,
    DropdownMenuItem,
-   DropdownMenuSeparator,
    DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { CardDescription, CardTitle } from "@/components/ui/card";
 import { MoreVerticalIcon, Plus } from "lucide-react";
 import AltButtons from "./AltButtons";
 import Link from "next/link";
-import DashboardIndexPage from "@/app/(dashboard)/dashboard/page";
 
 const CoursesView = ({ courses }: { courses: CourseInfo[] }) => {
    const { setAuthorsCourses, filteredCourses } = useCourseInformation((state) => state);
@@ -39,6 +37,11 @@ const CoursesView = ({ courses }: { courses: CourseInfo[] }) => {
             </div>
          ) : (
             <div>
+               <h1 className="text-gray-500 mb-2">
+                  {" "}
+                  <span className="font-bold  text-black">{filteredCourses.length ?? 0} </span>
+                  courses found
+               </h1>
                <div className="grid grid-cols-3 gap-4">
                   {filteredCourses?.map((course: CourseInfo, idx: number) => (
                      <div

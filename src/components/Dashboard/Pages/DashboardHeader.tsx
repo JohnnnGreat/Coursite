@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import { Bell, Search } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -9,8 +11,15 @@ import {
    DropdownMenuSeparator,
    DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import userState from "@/actions/userActions";
+import { signOut } from "next-auth/react";
 
 const Header = () => {
+   const { user } = userState((state) => state);
+
+   const handleSignOut = () => {
+      signOut();
+   };
    return (
       <header className="h-16 border-b bg-white flex items-center justify-between px-6">
          <div className="flex-1 max-w-xl">
@@ -34,8 +43,8 @@ const Header = () => {
 
             <div className="flex items-center gap-3 pl-4 border-l">
                <div className="text-right">
-                  <div className="text-sm font-medium">John Doe</div>
-                  <div className="text-xs text-[#000000a0]">Instructor</div>
+                  <div className="text-sm font-medium">{user?.name}</div>
+                  <div className="text-xs text-[#000000a0]">{user?.role}</div>
                </div>
                <DropdownMenu>
                   <DropdownMenuTrigger className="flex items-center gap-2">
@@ -54,7 +63,12 @@ const Header = () => {
                      <DropdownMenuItem>My Courses</DropdownMenuItem>
                      <DropdownMenuItem>Settings</DropdownMenuItem>
                      <DropdownMenuSeparator />
-                     <DropdownMenuItem className="text-red-600">Logout</DropdownMenuItem>
+                     <DropdownMenuItem
+                        onClick={handleSignOut}
+                        className="text-red-600"
+                     >
+                        Logout
+                     </DropdownMenuItem>
                   </DropdownMenuContent>
                </DropdownMenu>
             </div>

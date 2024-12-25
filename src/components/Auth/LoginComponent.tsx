@@ -18,13 +18,17 @@ import { FcGoogle } from "react-icons/fc";
 import Link from "next/link";
 import userState from "@/actions/userActions";
 import { ISession } from "./RegisterComponent";
+import { useRouter } from "next/navigation";
 
+const ILoginResponse = {
+   user: ISession,
+};
 /*
    LOGIN COMPONENT
 */
 function LoginPage() {
    const login = userState((state) => state?.login);
-
+   const router = useRouter();
    const loginForm = useForm<z.infer<typeof loginSchema>>({
       resolver: zodResolver(loginSchema),
       defaultValues: {
@@ -50,14 +54,15 @@ function LoginPage() {
       console.log(result);
 
       const session = await getSession();
-      const userInformation = session as ISession | null;
+      const userInformation = session as typeof ILoginResponse | null;
 
       // Prepare userinformation to be store in the zustand
-      const userPayload: ISession = {
+      const userPayload: typeof ILoginResponse = {
          ...userInformation?.user,
       };
 
       login(userPayload);
+      router.push("/dashboard");
    }
    return (
       <div className="h-screen flex items-center justify-center">

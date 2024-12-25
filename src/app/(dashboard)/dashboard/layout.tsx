@@ -1,8 +1,16 @@
 import DashboardHeader from "@/components/Dashboard/Pages/DashboardHeader";
 import SideNav from "@/components/Dashboard/SideNav";
+import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
 import React, { ReactNode } from "react";
 
-const layout = ({ children }: { children: ReactNode }) => {
+const layout = async ({ children }: { children: ReactNode }) => {
+   const session = await getServerSession();
+
+   if (!session?.user) {
+      redirect("/login");
+   }
+
    return (
       <div className="flex gap-1 h-screen overflow-hidden">
          <div className="w-[300px] border-r px-[2rem]">

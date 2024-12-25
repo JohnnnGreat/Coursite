@@ -113,7 +113,7 @@ const Prerequisites = () => {
                         </div>
                         <button
                            type="submit"
-                           disabled={prerequisites.length >= 10}
+                           disabled={prerequisites?.length >= 10}
                            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed h-10 flex items-center gap-2"
                         >
                            <Plus className="h-4 w-4" />
@@ -124,36 +124,34 @@ const Prerequisites = () => {
                </div>
 
                <div className="space-y-2">
-                  {prerequisites.length === 0 ? (
+                  {prerequisites?.length === 0 ? (
                      <div className="text-center py-8 text-gray-500">
                         No prerequisites added yet. Add some requirements that students should meet
                         before taking this course.
                      </div>
                   ) : (
                      <div className="space-y-2">
-                        {prerequisites
-                           // .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
-                           .map((item) => (
-                              <div
-                                 key={item?.id}
-                                 className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors group"
+                        {prerequisites?.map((item) => (
+                           <div
+                              key={item?.id}
+                              className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors group"
+                           >
+                              <span className="flex-1">{item?.text}</span>
+                              <button
+                                 onClick={() => handleDelete(item?.id)}
+                                 className="text-gray-400 hover:text-red-600 transition-colors p-1 rounded-full hover:bg-red-50 opacity-0 group-hover:opacity-100"
+                                 aria-label="Delete prerequisite"
                               >
-                                 <span className="flex-1">{item?.text}</span>
-                                 <button
-                                    onClick={() => handleDelete(item?.id)}
-                                    className="text-gray-400 hover:text-red-600 transition-colors p-1 rounded-full hover:bg-red-50 opacity-0 group-hover:opacity-100"
-                                    aria-label="Delete prerequisite"
-                                 >
-                                    <Trash2 className="h-4 w-4" />
-                                 </button>
-                              </div>
-                           ))}
+                                 <Trash2 className="h-4 w-4" />
+                              </button>
+                           </div>
+                        ))}
                      </div>
                   )}
 
-                  {prerequisites.length > 0 && (
+                  {prerequisites?.length > 0 && (
                      <p className="text-sm text-gray-500 mt-2">
-                        {prerequisites.length}/10 prerequisites added
+                        {prerequisites?.length}/10 prerequisites added
                      </p>
                   )}
                </div>

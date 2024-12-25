@@ -52,15 +52,12 @@ const FilteredCourses = () => {
                />
             </div>
             <div className="flex gap-2">
-               <button className="flex items-center gap-2 px-4 py-2 border rounded-lg hover:bg-gray-50">
-                  <Filter className="h-4 w-4" />
-                  Filter
-               </button>
                <Select
                   value={filterState}
                   onValueChange={handleFilterChange}
                >
-                  <SelectTrigger>
+                  <SelectTrigger className="p-4">
+                     <Filter className="h-4 w-4" />
                      <SelectValue placeholder="Filter courses" />
                   </SelectTrigger>
                   <SelectContent>
