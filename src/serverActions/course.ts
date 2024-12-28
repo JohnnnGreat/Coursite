@@ -248,3 +248,41 @@ export async function deleteCourse(courseId: string): Promise<DeleteCourseRespon
       };
    }
 }
+
+// Students Sections
+export const getRecentCourses = async () => {
+   try {
+      const recentCourses = await Course.find({ draft: false })
+         .sort({ createdAt: -1 })
+         .populate({
+            path: "authorId",
+         })
+         .limit(5);
+
+      console.log(recentCourses);
+      return {
+         success: true,
+         courses: recentCourses,
+         message: "Recent Courses Fetched",
+      };
+   } catch (error) {
+      if (error instanceof Error) {
+         throw new Error(error.message);
+      }
+   }
+};
+
+export const getStudentEnrolledCourses = async () => {
+   try {
+      const session = await getServerSession(authOptions);
+      if (!session?.user) {
+         throw new Error("Unauthorized: No user session found");
+      }
+   } catch (error) {
+      if (error instanceof Error) {
+         throw new Error(error.message);
+      }
+   }
+};
+
+const getPropularCourses = () => {};

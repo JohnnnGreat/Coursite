@@ -1,12 +1,12 @@
 "use client";
 import useCourseInformation from "@/actions/courseActions";
 import { Button } from "@/components/ui/button";
-import { Card, CardDescription, CardTitle } from "@/components/ui/card";
-import { Link, User } from "lucide-react";
+import { CardDescription, CardTitle } from "@/components/ui/card";
+import { User } from "lucide-react";
 import React from "react";
 
 const StudentsSide = ({ courses }: any) => {
-   console.log(courses);
+   
    return (
       <div className="py-[3rem] px-2">
          <h1 className="font-bold">Your Courses</h1>

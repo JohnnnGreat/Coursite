@@ -25,7 +25,9 @@ const CoursesView = ({ courses }: { courses: CourseInfo[] }) => {
             <div className="flex items-center justify-center h-[400px] border-2 border-dashed">
                <div className="text-center p-6">
                   <Plus className="h-12 w-12 mx-auto text-gray-400" />
-                  <h3 className="mt-2 text-lg font-medium text-gray-900">Create a new course</h3>
+                  <h3 className="mt-2 text-[1.2rem] md:text-lg font-medium text-gray-900">
+                     Create a new course
+                  </h3>
                   <p className="mt-1 text-sm text-gray-500">Get started by creating a new course</p>
                   <Link
                      href="/dashboard/courses/create"
@@ -42,7 +44,7 @@ const CoursesView = ({ courses }: { courses: CourseInfo[] }) => {
                   <span className="font-bold  text-black">{filteredCourses.length ?? 0} </span>
                   courses found
                </h1>
-               <div className="grid grid-cols-3 gap-4">
+               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   {filteredCourses?.map((course: CourseInfo, idx: number) => (
                      <div
                         key={idx}
