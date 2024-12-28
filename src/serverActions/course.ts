@@ -308,6 +308,8 @@ export const getStudentEnrolledCourses = async () => {
 
 export const enrollCourse = async (courseId: string) => {
    try {
+
+      
       const session = await getServerSession(authOptions);
 
       console.log(session);
