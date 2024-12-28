@@ -6,7 +6,7 @@ import React from "react";
 const DashboardIndexPage = async () => {
    const session = await getServerSession();
 
-   if (session?.user?.role !== "instructor") {
+   if (session?.user?.role !== "student") {
       return <MainPage />;
    } else {
       return <CoursesComponent />;

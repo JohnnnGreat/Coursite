@@ -4,6 +4,7 @@ import connectDB from "@/lib/mongodb";
 import { Course } from "@/schema/Course";
 import { Section } from "@/schema/Section";
 import { Lesson } from "@/schema/Lesson";
+import { Enrollments } from "@/schema/Enrollment";
 import mongoose from "mongoose";
 import { getSession } from "next-auth/react";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
@@ -32,7 +33,9 @@ interface CourseData {
    title: string;
    description?: string;
    sections?: SectionData[];
-   authorId?: string;
+   authorId?: {
+      [key: string]: string;
+   };
    draft?: boolean;
    [key: string]: any;
 }
@@ -259,16 +262,34 @@ export const getRecentCourses = async () => {
          })
          .limit(5);
 
-      console.log(recentCourses);
+      // Return the formatted courses array dynamically
       return {
          success: true,
-         courses: recentCourses,
+         courses: recentCourses.map((course) => ({
+            _id: course._id,
+            title: course.title,
+            imageUrl:
+               course.imageUrl ??
+               "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQzb-tHLTy_x3v4ZB57K-ufNqxXyHPT3AARmQ&s",
+            category: course.category,
+            level: course.level,
+            price: course.price,
+            lessons: course.lessons,
+            authorId: {
+               name: course.authorId?.name,
+               avatar: course.authorId?.avatar,
+            },
+            enrollments: course.enrollments?.length || 0,
+            initialEnrollmentStatus: course.initialEnrollmentStatus, // Adjust field if required
+         })),
          message: "Recent Courses Fetched",
       };
    } catch (error) {
-      if (error instanceof Error) {
-         throw new Error(error.message);
-      }
+      console.error("Error fetching recent courses:", error); // Improved logging
+      return {
+         success: false,
+         message: error instanceof Error ? error.message : "An unexpected error occurred",
+      };
    }
 };
 
@@ -278,6 +299,25 @@ export const getStudentEnrolledCourses = async () => {
       if (!session?.user) {
          throw new Error("Unauthorized: No user session found");
       }
+   } catch (error) {
+      if (error instanceof Error) {
+         throw new Error(error.message);
+      }
+   }
+};
+
+export const enrollCourse = async (courseId: string) => {
+   try {
+      const session = await getServerSession(authOptions);
+
+      console.log(session);
+
+      const newEnrollment = new Enrollment({
+         courseId: courseId,
+         userId: session?.id,
+      });
+
+      console.log(newEnrollment, session);
    } catch (error) {
       if (error instanceof Error) {
          throw new Error(error.message);
