@@ -27,3 +27,6 @@ const EnrollmentSchema: Schema<IEnrollment> = new Schema({
       default: Date.now,
    },
 });
+
+export const Enrollment: Model<IEnrollment> =
+   mongoose.models.Enrollment || mongoose.model<IEnrollment>("Enrollment", EnrollmentSchema);

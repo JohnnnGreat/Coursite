@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BookOpen, Users, Star, Share2, Bookmark, BookmarkCheck, Loader2 } from "lucide-react";
 import {
    DropdownMenu,
@@ -9,8 +9,155 @@ import {
    DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import { enrollCourse } from "@/serverActions/course";
+import userState from "@/actions/userActions";
 
-const CourseCard: React.FC<any> = ({
+// Types
+interface CourseCardProps {
+   _id: string;
+   title: string;
+   imageUrl: string;
+   category: string;
+   level: string;
+   price: number;
+   lessons: number;
+   authorId: {
+      name: string;
+      avatar: string;
+   };
+   enrollments: string[];
+}
+
+interface LoadingState {
+   enroll: boolean;
+   bookmark: boolean;
+   share: boolean;
+}
+
+// Components
+const CourseImage: React.FC<{
+   imageUrl: string;
+   title: string;
+   level: string;
+   isEnrolled: boolean;
+}> = ({ imageUrl, title, level, isEnrolled }) => (
+   <div className="relative aspect-video overflow-hidden">
+      <img
+         src={imageUrl || "/api/placeholder/400/225"}
+         alt={title}
+         className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-300"
+      />
+      {isEnrolled && (
+         <div className="absolute top-3 left-3">
+            <span className="bg-blue-600 text-white text-xs font-medium px-2.5 py-1 rounded-full">
+               Enrolled
+            </span>
+         </div>
+      )}
+      <div className="absolute top-3 right-3">
+         <span className="bg-white/90 backdrop-blur-sm text-xs font-medium px-2.5 py-1 rounded-full">
+            {level}
+         </span>
+      </div>
+   </div>
+);
+
+const ActionButtons: React.FC<{
+   isBookmarked: boolean;
+   isLoading: LoadingState;
+   onBookmark: () => void;
+   onShare: (platform: string) => void;
+}> = ({ isBookmarked, isLoading, onBookmark, onShare }) => {
+   const shareOptions = [
+      { name: "Twitter", action: "twitter" },
+      { name: "Facebook", action: "facebook" },
+      { name: "LinkedIn", action: "linkedin" },
+      { name: "WhatsApp", action: "whatsapp" },
+      { name: "Email", action: "email" },
+      { name: "Copy Link", action: "copy" },
+   ];
+
+   return (
+      <div className="flex gap-2">
+         <TooltipProvider>
+            <Tooltip>
+               <TooltipTrigger asChild>
+                  <button
+                     onClick={onBookmark}
+                     disabled={isLoading.bookmark}
+                     className="p-1.5 rounded-full hover:bg-gray-100 transition-colors disabled:opacity-50"
+                  >
+                     {isLoading.bookmark ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                     ) : isBookmarked ? (
+                        <BookmarkCheck className="w-4 h-4 text-blue-600" />
+                     ) : (
+                        <Bookmark className="w-4 h-4 text-gray-600" />
+                     )}
+                  </button>
+               </TooltipTrigger>
+               <TooltipContent>
+                  <p>{isBookmarked ? "Remove from bookmarks" : "Add to bookmarks"}</p>
+               </TooltipContent>
+            </Tooltip>
+         </TooltipProvider>
+
+         <TooltipProvider>
+            <Tooltip>
+               <TooltipTrigger asChild>
+                  <DropdownMenu>
+                     <DropdownMenuTrigger
+                        disabled={isLoading.share}
+                        className="p-1.5 rounded-full hover:bg-gray-100 transition-colors disabled:opacity-50"
+                     >
+                        {isLoading.share ? (
+                           <Loader2 className="w-4 h-4 animate-spin" />
+                        ) : (
+                           <Share2 className="w-4 h-4 text-gray-600" />
+                        )}
+                     </DropdownMenuTrigger>
+                     <DropdownMenuContent
+                        align="end"
+                        className="w-40"
+                     >
+                        {shareOptions.map((option) => (
+                           <DropdownMenuItem
+                              key={option.action}
+                              onClick={() => onShare(option.action)}
+                           >
+                              {option.name}
+                           </DropdownMenuItem>
+                        ))}
+                     </DropdownMenuContent>
+                  </DropdownMenu>
+               </TooltipTrigger>
+               <TooltipContent>
+                  <p>Share this course</p>
+               </TooltipContent>
+            </Tooltip>
+         </TooltipProvider>
+      </div>
+   );
+};
+
+const CourseStats: React.FC<{
+   enrollmentsCount: number;
+   lessonsCount: number;
+}> = ({ enrollmentsCount, lessonsCount }) => (
+   <div className="flex items-center gap-4 mb-4">
+      <div className="flex items-center gap-1 text-sm text-gray-600">
+         <Users className="w-4 h-4" />
+         <span>{enrollmentsCount || 0}</span>
+      </div>
+      <div className="flex items-center gap-1 text-sm text-gray-600">
+         <BookOpen className="w-4 h-4" />
+         <span>{lessonsCount || 0} lessons</span>
+      </div>
+   </div>
+);
+
+// Main Component
+const CourseCard: React.FC<CourseCardProps> = ({
    _id,
    title,
    imageUrl,
@@ -20,23 +167,21 @@ const CourseCard: React.FC<any> = ({
    lessons,
    authorId,
    enrollments,
-   initialEnrollmentStatus,
 }) => {
    const [isBookmarked, setIsBookmarked] = useState(false);
-   const [isEnrolled, setIsEnrolled] = useState(initialEnrollmentStatus);
-   const [isLoading, setIsLoading] = useState({
+   const [isEnrolled, setIsEnrolled] = useState(false);
+   const [isLoading, setIsLoading] = useState<LoadingState>({
       enroll: false,
       bookmark: false,
       share: false,
    });
+   const { user } = userState();
 
-   const handleEnroll = async (id:string ) => {
-      console.log(id);
+   const handleEnroll = async () => {
       try {
          setIsLoading((prev) => ({ ...prev, enroll: true }));
-
-         await new Promise((resolve) => setTimeout(resolve, 1000)); // Simulate API call
-         setIsEnrolled(true);
+         const response = await enrollCourse(_id);
+         console.log(response);
       } catch (error) {
          console.error("Enrollment failed:", error);
       } finally {
@@ -47,8 +192,7 @@ const CourseCard: React.FC<any> = ({
    const handleBookmark = async () => {
       try {
          setIsLoading((prev) => ({ ...prev, bookmark: true }));
-
-         await new Promise((resolve) => setTimeout(resolve, 500)); // Simulate API call
+         await new Promise((resolve) => setTimeout(resolve, 500));
          setIsBookmarked(!isBookmarked);
       } catch (error) {
          console.error("Bookmark failed:", error);
@@ -57,22 +201,12 @@ const CourseCard: React.FC<any> = ({
       }
    };
 
-   const shareOptions = [
-      { name: "Twitter", action: "twitter" },
-      { name: "Facebook", action: "facebook" },
-      { name: "LinkedIn", action: "linkedin" },
-      { name: "WhatsApp", action: "whatsapp" },
-      { name: "Email", action: "email" },
-      { name: "Copy Link", action: "copy" },
-   ];
-
-   const handleShare = async (platform) => {
+   const handleShare = async (platform: string) => {
       setIsLoading((prev) => ({ ...prev, share: true }));
       try {
          switch (platform) {
             case "copy":
                await navigator.clipboard.writeText(window.location.href);
-               // You could add a toast notification here
                break;
             case "twitter":
                window.open(
@@ -81,7 +215,6 @@ const CourseCard: React.FC<any> = ({
                   )}&text=${encodeURIComponent(title)}`,
                );
                break;
-            // Implement other sharing options
          }
       } catch (error) {
          console.error("Share failed:", error);
@@ -90,93 +223,31 @@ const CourseCard: React.FC<any> = ({
       }
    };
 
+   useEffect(() => {
+      setIsEnrolled(enrollments.includes(user?.id));
+   }, [enrollments, user?.id]);
+
    return (
       <div
          className={`group bg-white rounded-xl border transition-all duration-300 overflow-hidden
       ${isEnrolled ? "border-blue-200 bg-blue-50/30" : "border-gray-200 hover:shadow-lg"}`}
       >
-         <div className="relative aspect-video overflow-hidden">
-            <img
-               src={imageUrl || "/api/placeholder/400/225"}
-               alt={title}
-               className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-300"
-            />
-            {isEnrolled && (
-               <div className="absolute top-3 left-3">
-                  <span className="bg-blue-600 text-white text-xs font-medium px-2.5 py-1 rounded-full">
-                     Enrolled
-                  </span>
-               </div>
-            )}
-            <div className="absolute top-3 right-3">
-               <span className="bg-white/90 backdrop-blur-sm text-xs font-medium px-2.5 py-1 rounded-full">
-                  {level}
-               </span>
-            </div>
-         </div>
+         <CourseImage
+            imageUrl={imageUrl}
+            title={title}
+            level={level}
+            isEnrolled={isEnrolled}
+         />
 
          <div className="p-5">
             <div className="flex items-center justify-between mb-3">
                <span className="bg-gray-100 text-xs px-2.5 py-1 rounded-full">{category}</span>
-               <div className="flex gap-2">
-                  <TooltipProvider>
-                     <Tooltip>
-                        <TooltipTrigger asChild>
-                           <button
-                              onClick={handleBookmark}
-                              disabled={isLoading.bookmark}
-                              className="p-1.5 rounded-full hover:bg-gray-100 transition-colors disabled:opacity-50"
-                           >
-                              {isLoading.bookmark ? (
-                                 <Loader2 className="w-4 h-4 animate-spin" />
-                              ) : isBookmarked ? (
-                                 <BookmarkCheck className="w-4 h-4 text-blue-600" />
-                              ) : (
-                                 <Bookmark className="w-4 h-4 text-gray-600" />
-                              )}
-                           </button>
-                        </TooltipTrigger>
-                        <TooltipContent>
-                           <p>{isBookmarked ? "Remove from bookmarks" : "Add to bookmarks"}</p>
-                        </TooltipContent>
-                     </Tooltip>
-                  </TooltipProvider>
-
-                  <TooltipProvider>
-                     <Tooltip>
-                        <TooltipTrigger asChild>
-                           <DropdownMenu>
-                              <DropdownMenuTrigger
-                                 disabled={isLoading.share}
-                                 className="p-1.5 rounded-full hover:bg-gray-100 transition-colors disabled:opacity-50"
-                              >
-                                 {isLoading.share ? (
-                                    <Loader2 className="w-4 h-4 animate-spin" />
-                                 ) : (
-                                    <Share2 className="w-4 h-4 text-gray-600" />
-                                 )}
-                              </DropdownMenuTrigger>
-                              <DropdownMenuContent
-                                 align="end"
-                                 className="w-40"
-                              >
-                                 {shareOptions.map((option) => (
-                                    <DropdownMenuItem
-                                       key={option.action}
-                                       onClick={() => handleShare(option.action)}
-                                    >
-                                       {option.name}
-                                    </DropdownMenuItem>
-                                 ))}
-                              </DropdownMenuContent>
-                           </DropdownMenu>
-                        </TooltipTrigger>
-                        <TooltipContent>
-                           <p>Share this course</p>
-                        </TooltipContent>
-                     </Tooltip>
-                  </TooltipProvider>
-               </div>
+               <ActionButtons
+                  isBookmarked={isBookmarked}
+                  isLoading={isLoading}
+                  onBookmark={handleBookmark}
+                  onShare={handleShare}
+               />
             </div>
 
             <h3 className="text-lg font-semibold leading-snug mb-2 group-hover:text-blue-600 transition-colors">
@@ -192,16 +263,10 @@ const CourseCard: React.FC<any> = ({
                <span className="text-sm text-gray-600">{authorId?.name}</span>
             </div>
 
-            <div className="flex items-center gap-4 mb-4">
-               <div className="flex items-center gap-1 text-sm text-gray-600">
-                  <Users className="w-4 h-4" />
-                  <span>{enrollments?.length || 0}</span>
-               </div>
-               <div className="flex items-center gap-1 text-sm text-gray-600">
-                  <BookOpen className="w-4 h-4" />
-                  <span>{lessons || 0} lessons</span>
-               </div>
-            </div>
+            <CourseStats
+               enrollmentsCount={enrollments?.length}
+               lessonsCount={lessons}
+            />
 
             <div className="flex items-center justify-between pt-4 border-t">
                <span className="text-xl font-bold">${price?.toLocaleString()}</span>
@@ -211,7 +276,7 @@ const CourseCard: React.FC<any> = ({
                   </button>
                ) : (
                   <button
-                     onClick={() => handleEnroll(_id)}
+                     onClick={handleEnroll}
                      disabled={isLoading.enroll}
                      className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   >

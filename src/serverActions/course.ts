@@ -4,12 +4,14 @@ import connectDB from "@/lib/mongodb";
 import { Course } from "@/schema/Course";
 import { Section } from "@/schema/Section";
 import { Lesson } from "@/schema/Lesson";
-import { Enrollments } from "@/schema/Enrollment";
+import { Enrollment } from "@/schema/Enrollment";
+import { User } from "@/schema/User";
 import mongoose from "mongoose";
 import { getSession } from "next-auth/react";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { getServerSession } from "next-auth";
 import { revalidatePath } from "next/cache";
+import { CLIENT_STATIC_FILES_RUNTIME_REACT_REFRESH } from "next/dist/shared/lib/constants";
 
 interface LessonData {
    title: string;
@@ -258,15 +260,15 @@ export const getRecentCourses = async () => {
       const recentCourses = await Course.find({ draft: false })
          .sort({ createdAt: -1 })
          .populate({
-            path: "authorId",
+            path: "authorId enrollments",
          })
          .limit(5);
 
       // Return the formatted courses array dynamically
       return {
          success: true,
-         courses: recentCourses.map((course) => ({
-            _id: course._id,
+         courses: recentCourses.map((course: any): any => ({
+            _id: course._id.toString(),
             title: course.title,
             imageUrl:
                course.imageUrl ??
@@ -276,11 +278,10 @@ export const getRecentCourses = async () => {
             price: course.price,
             lessons: course.lessons,
             authorId: {
-               name: course.authorId?.name,
-               avatar: course.authorId?.avatar,
+               name: course.authorId?.name ?? "Unknown Author",
+               avatar: course.authorId?.avatar ?? "/api/placeholder/32/32",
             },
-            enrollments: course.enrollments?.length || 0,
-            initialEnrollmentStatus: course.initialEnrollmentStatus, // Adjust field if required
+            enrollments: course?.enrollments.map((enrollment) => enrollment.userId.toString()),
          })),
          message: "Recent Courses Fetched",
       };
@@ -308,18 +309,179 @@ export const getStudentEnrolledCourses = async () => {
 
 export const enrollCourse = async (courseId: string) => {
    try {
-
-      
+      // Validate session
       const session = await getServerSession(authOptions);
+      if (!session || !session.user || !session.user.id) {
+         throw new Error("User is not authenticated");
+      }
 
-      console.log(session);
+      console.log("Session:", session);
 
+      // Create new enrollment
       const newEnrollment = new Enrollment({
          courseId: courseId,
-         userId: session?.id,
+         userId: session.user.id,
       });
 
-      console.log(newEnrollment, session);
+      await newEnrollment.save();
+      console.log("New Enrollment:", newEnrollment);
+
+      // Find course and update enrollments
+      const course = await Course.findOne({ _id: courseId });
+      if (!course) {
+         throw new Error("Course not found");
+      }
+
+      course.enrollments.push(newEnrollment._id);
+      await course.save();
+
+      const updateUserEnrolledCourse = await User.findOne({ _id: session.user.id });
+      updateUserEnrolledCourse.enrollments.push(newEnrollment);
+
+      await updateUserEnrolledCourse.save();
+
+      console.log("Updated Course:", course);
+
+      revalidatePath("/courses");
+      return {
+         success: true,
+         message: "Enrolled successfully",
+      };
+   } catch (error) {
+      if (error instanceof Error) {
+         console.error("Error:", error.message);
+         throw new Error(error.message);
+      } else {
+         console.error("Unknown Error:", error);
+         throw new Error("An unknown error occurred");
+      }
+   }
+};
+
+export const getUserInformation = async () => {
+   try {
+      const session = await getServerSession(authOptions);
+
+      if (!session || !session.user || !session.user.id) {
+         throw new Error("User is not authenticated");
+      }
+      const user = await User.findOne({ _id: session.user.id });
+      return {
+         success: true,
+         user: JSON.parse(JSON.stringify(user)),
+         message: "User fetched successfully",
+      };
+   } catch (error) {
+      if (error instanceof Error) {
+         console.error("Error:", error.message);
+         throw new Error(error.message);
+      } else {
+         console.error("Unknown Error:", error);
+         throw new Error("An unknown error occurred");
+      }
+   }
+};
+
+export interface CourseFilters {
+   search?: string;
+   categories?: string[];
+   levels?: string[];
+   priceRange?: {
+      min?: number;
+      max?: number;
+   };
+   rating?: number;
+   sortBy?: "price_asc" | "price_desc" | "rating" | "newest" | "popular";
+   page?: number;
+   limit?: number;
+}
+
+export const filterCourses = async (filters: CourseFilters) => {
+   console.log(filters);
+   try {
+      const query: any = {};
+
+      // Search by title or description
+      if (filters?.search) {
+         query.$or = [
+            { title: { $regex: filters.search, $options: "i" } },
+            { description: { $regex: filters.search, $options: "i" } },
+         ];
+      }
+
+      // Filter by categories
+      if (filters.categories?.length) {
+         query.category = { $in: filters.categories };
+      }
+
+      // Filter by levels
+      if (filters.levels?.length) {
+         query.level = { $in: filters.levels };
+      }
+
+      // Filter by price range
+      if (filters.priceRange) {
+         query.price = {};
+         if (filters.priceRange.min !== undefined) {
+            query.price.$gte = filters.priceRange.min;
+         }
+         if (filters.priceRange.max !== undefined) {
+            query.price.$lte = filters.priceRange.max;
+         }
+      }
+
+      // Filter by minimum rating
+      if (filters.rating) {
+         query.rating = { $gte: filters.rating };
+      }
+
+      // Prepare sort options
+      let sortOptions: any = {};
+      // switch (filters.sortBy) {
+      //    case "price_asc":
+      //       sortOptions.price = 1;
+      //       break;
+      //    case "price_desc":
+      //       sortOptions.price = -1;
+      //       break;
+      //    case "rating":
+      //       sortOptions.rating = -1;
+      //       break;
+      //    case "newest":
+      //       sortOptions.createdAt = -1;
+      //       break;
+      //    case "popular":
+      //       sortOptions = { "enrollments.length": -1 };
+      //       break;
+      //    default:
+      //       sortOptions.createdAt = -1; // Default sort by newest
+      // }
+
+      // Pagination
+      const page = filters.page || 1;
+      const limit = filters.limit || 10;
+      const skip = (page - 1) * limit;
+
+      // Execute query with pagination
+      const [courses, totalCount] = await Promise.all([
+         Course.find(query)
+            .sort(sortOptions)
+            .skip(skip)
+            .limit(limit)
+            .populate("authorId", "name avatar")
+            .lean(),
+         Course.countDocuments(query),
+      ]);
+
+      return {
+         courses,
+         pagination: {
+            currentPage: page,
+            totalPages: Math.ceil(totalCount / limit),
+            totalCourses: totalCount,
+            hasMore: page * limit < totalCount,
+         },
+      };
    } catch (error) {
       if (error instanceof Error) {
          throw new Error(error.message);

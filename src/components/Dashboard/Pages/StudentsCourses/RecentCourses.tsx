@@ -3,6 +3,7 @@ import CourseCard from "@/components/Dashboard/Pages/StudentsCourses/MainCourseC
 
 export default async function RecentCourses() {
    const recentCourses = await getRecentCourses();
+   console.log(recentCourses);
 
    return (
       <div className="space-y-6 p-[2rem]">
@@ -16,7 +17,6 @@ export default async function RecentCourses() {
                <CourseCard
                   key={course.id}
                   {...course}
-                  initialEnrollmentStatus={Boolean(course.isEnrolled)}
                />
             ))}
          </div>
