@@ -368,7 +368,12 @@ export const getUserInformation = async () => {
       const user = await User.findOne({ _id: session.user.id });
       return {
          success: true,
-         user: JSON.parse(JSON.stringify(user)),
+         user: {
+            name: user.name,
+            email: user.email,
+            _id: user.id.toString(),
+            imageUrl: user.imageUrl,
+         },
          message: "User fetched successfully",
       };
    } catch (error) {
@@ -474,7 +479,7 @@ export const filterCourses = async (filters: CourseFilters) => {
       ]);
 
       return {
-         courses,
+         courses: courses.map((course: any) => course),
          pagination: {
             currentPage: page,
             totalPages: Math.ceil(totalCount / limit),

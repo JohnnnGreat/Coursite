@@ -3,6 +3,8 @@ import { Button } from "@/components/ui/button";
 import { deleteCourse } from "@/serverActions/course";
 import { Edit, Trash } from "lucide-react";
 
+
+// Actions Buttons
 const AltButtons = ({ courseInformation }: any) => {
    return (
       <div className="flex gap-3 mt-4">

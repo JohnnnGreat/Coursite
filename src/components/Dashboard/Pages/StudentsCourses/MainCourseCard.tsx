@@ -11,6 +11,7 @@ import {
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { enrollCourse } from "@/serverActions/course";
 import userState from "@/actions/userActions";
+import Link from "next/link";
 
 // Types
 interface CourseCardProps {
@@ -271,9 +272,9 @@ const CourseCard: React.FC<CourseCardProps> = ({
             <div className="flex items-center justify-between pt-4 border-t">
                <span className="text-xl font-bold">${price?.toLocaleString()}</span>
                {isEnrolled ? (
-                  <button className="bg-blue-100 text-blue-700 px-6 py-2 rounded-lg font-medium hover:bg-blue-200 transition-colors">
+                  <Link href={`${_id}`} className="bg-blue-100 text-blue-700 px-6 py-2 rounded-lg font-medium hover:bg-blue-200 transition-colors">
                      Continue Learning
-                  </button>
+                  </Link>
                ) : (
                   <button
                      onClick={handleEnroll}

@@ -12,22 +12,12 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import debounce from "lodash/debounce";
+import { CourseInfo } from "@/actions/courseActions";
 
-interface Course {
-   id?: string;
-   title?: string;
-   description?: string;
-   category?: string;
-   draft?: boolean;
-   published?: boolean;
-   level?: string;
-   updatedAt?: Date;
-   authorId?: string;
-}
 
 interface CourseSearchProps {
-   courses: Course[];
-   onCourseSelect?: (course: Course) => void;
+   courses: CourseInfo[];
+   onCourseSelect?: (course: CourseInfo) => void;
    className?: string;
 }
 
@@ -36,14 +26,14 @@ const MAX_RECENT_SEARCHES = 5;
 const CourseSearch: React.FC<CourseSearchProps> = ({ courses, onCourseSelect, className }) => {
    const [open, setOpen] = useState<boolean>(false);
    const [searchQuery, setSearchQuery] = useState<string>("");
-   const [filteredCourses, setFilteredCourses] = useState<Course[]>([]);
+   const [filteredCourses, setFilteredCourses] = useState<CourseInfo[]>([]);
    const [isLoading, setIsLoading] = useState<boolean>(false);
    const [recentSearches, setRecentSearches] = useState<string[]>(() => {
       const saved = localStorage.getItem("recentSearches");
       return saved ? JSON.parse(saved) : [];
    });
 
-   // Highlight matching text in search results
+
    const highlightText = (text: string, query: string) => {
       if (!query) return text;
       const parts = text.split(new RegExp(`(${query})`, "gi"));

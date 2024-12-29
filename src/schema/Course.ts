@@ -18,10 +18,10 @@ export interface ICourse extends Document {
    courseCertification?: boolean;
    seoTitle?: string;
    metaDescription?: string;
-   authorId?: mongoose.Types.ObjectId;
-   sections?: mongoose.Types.ObjectId[];
+   authorId?: mongoose.Types.ObjectId | string;
+   sections?: mongoose.Types.ObjectId[] | any[];
    lessons?: mongoose.Types.ObjectId[];
-   enrollments?: mongoose.Types.ObjectId[];
+   enrollments?: mongoose.Types.ObjectId[] | any[];
    createdAt?: Date;
    updatedAt?: Date;
 }

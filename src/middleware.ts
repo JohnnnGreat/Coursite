@@ -31,16 +31,11 @@ export default withAuth(
          log("Redirecting authenticated user from auth page to dashboard");
          return NextResponse.redirect(new URL("/dashboard", req.url));
       }
+      console.log(token?.role);
 
       // Handle admin route protection
-      if (isAdminPage && token?.role !== "ADMIN") {
+      if (!isAuth) {
          log("Unauthorized access to admin page, redirecting");
-         return NextResponse.redirect(new URL("/unauthorized", req.url));
-      }
-
-      // Handle teacher route protection
-      if (isTeacherPage && token?.role !== "TEACHER" && token?.role !== "ADMIN") {
-         log("Unauthorized access to teacher page, redirecting");
          return NextResponse.redirect(new URL("/unauthorized", req.url));
       }
 

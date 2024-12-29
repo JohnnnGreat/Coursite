@@ -100,17 +100,18 @@ export default function SearchCourses() {
                      </DialogContent>
                   </Dialog>
                </div>
-               <div className="p-[1rem] border rounded-[10px] mt-[.5rem]">
+               {/* <div className="p-[1rem] border rounded-[10px] mt-[.5rem]">
                   <h1>Search Results</h1>
                   <div>
                      {filterResults.map((item) => (
                         <div>
                            <h1 className="font-bold">{item?.title}</h1>
-                           <p>{item.description}</p>
+                           <p className="text-[.7rem] text-gray-500">{item.description}</p>
+                           <p>{item?.enrollments?.length} enrollmens</p>
                         </div>
                      ))}
                   </div>
-               </div>
+               </div> */}
             </div>
 
             {/* Filter Buttons Row */}
