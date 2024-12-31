@@ -294,19 +294,6 @@ export const getRecentCourses = async () => {
    }
 };
 
-export const getStudentEnrolledCourses = async () => {
-   try {
-      const session = await getServerSession(authOptions);
-      if (!session?.user) {
-         throw new Error("Unauthorized: No user session found");
-      }
-   } catch (error) {
-      if (error instanceof Error) {
-         throw new Error(error.message);
-      }
-   }
-};
-
 export const enrollCourse = async (courseId: string) => {
    try {
       // Validate session
@@ -368,12 +355,14 @@ export const getUserInformation = async () => {
       const user = await User.findOne({ _id: session.user.id });
       return {
          success: true,
-         user: {
-            name: user.name,
-            email: user.email,
-            _id: user.id.toString(),
-            imageUrl: user.imageUrl,
-         },
+         user: JSON.parse(
+            JSON.stringify({
+               name: user.name,
+               email: user.email,
+               _id: user.id.toString(),
+               imageUrl: user.imageUrl,
+            }),
+         ),
          message: "User fetched successfully",
       };
    } catch (error) {
@@ -491,6 +480,65 @@ export const filterCourses = async (filters: CourseFilters) => {
       if (error instanceof Error) {
          throw new Error(error.message);
       }
+   }
+};
+
+export const getStudentEnrolledCourses = async (): Promise<GetAllCourseResponse> => {
+   try {
+      const session = await getServerSession(authOptions);
+
+      if (!session || !session.user || !session.user.id) {
+         throw new Error("Unauthorized: No user session found");
+      }
+      const userId = session.user.id;
+
+      const enrollments = await Enrollment.find({ userId: userId }).populate({
+         path: "courseId",
+      });
+
+      const courses = enrollments.map((enrollment) => enrollment.courseId);
+
+      return {
+         success: true,
+         courses: JSON.parse(JSON.stringify(courses)),
+         message: "Courses Fetched Successfully",
+      };
+   } catch (error) {
+      throw new Error(
+         error instanceof Error ? error.message : "Failed to Fetch all courses by user",
+      );
+   }
+};
+
+export const getCourseById = async (courseId: string) => {
+   try {
+      if (!mongoose.Types.ObjectId.isValid(courseId)) {
+         throw new Error("Invalid course ID format");
+      }
+
+      const course = await Course.findById(courseId)
+         .populate([
+            { path: "authorId" },
+            {
+               path: "sections",
+               populate: {
+                  path: "lessons",
+               },
+            },
+         ])
+         .lean();
+
+      if (!course) {
+         throw new Error("Course not found");
+      }
+
+      return {
+         success: true,
+         course: JSON.parse(JSON.stringify(course)),
+         message: "Course fetched successfully",
+      };
+   } catch (error) {
+      throw new Error(error instanceof Error ? error.message : "Failed to fetch course by ID");
    }
 };
 

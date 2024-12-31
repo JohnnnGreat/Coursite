@@ -1,9 +1,8 @@
-import React from 'react'
+import React from "react";
+import ProgressOverview from "./ProgressOverview";
 
 const StudentsOverview = () => {
-  return (
-    <div>StudentsOverview</div>
-  )
-}
+   return <ProgressOverview />;
+};
 
-export default StudentsOverview
+export default StudentsOverview;

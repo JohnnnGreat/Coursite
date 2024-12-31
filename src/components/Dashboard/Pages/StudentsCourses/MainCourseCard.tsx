@@ -176,7 +176,7 @@ const CourseCard: React.FC<CourseCardProps> = ({
       bookmark: false,
       share: false,
    });
-   const { user } = userState();
+   const { user } = userState((state) => state);
 
    const handleEnroll = async () => {
       try {
@@ -225,6 +225,8 @@ const CourseCard: React.FC<CourseCardProps> = ({
    };
 
    useEffect(() => {
+      console.log("user", user);
+      console.log("enrollments", enrollments, "id", user?.id);
       setIsEnrolled(enrollments.includes(user?.id));
    }, [enrollments, user?.id]);
 
@@ -272,7 +274,10 @@ const CourseCard: React.FC<CourseCardProps> = ({
             <div className="flex items-center justify-between pt-4 border-t">
                <span className="text-xl font-bold">${price?.toLocaleString()}</span>
                {isEnrolled ? (
-                  <Link href={`${_id}`} className="bg-blue-100 text-blue-700 px-6 py-2 rounded-lg font-medium hover:bg-blue-200 transition-colors">
+                  <Link
+                     href={`/dashboard/courses/${_id}`}
+                     className="bg-blue-100 text-blue-700 px-6 py-2 rounded-lg font-medium hover:bg-blue-200 transition-colors"
+                  >
                      Continue Learning
                   </Link>
                ) : (

@@ -151,7 +151,6 @@ export const authOptions: NextAuthOptions = {
       },
 
       async jwt({ token, user }) {
-         console.log("jwt", token);
          if (user) {
             token.role = user.role;
          }
@@ -168,15 +167,12 @@ export const authOptions: NextAuthOptions = {
       },
 
       async session({ session, token, user }) {
-         console.log("jwt", token);
          if (token.sub) {
             session.user.id = token.sub;
          }
          if (token.role) {
             session.user.role = token.role;
          }
-
-         console.log("Ths is the session", session);
 
          session.user = {
             ...session.user,

@@ -12,8 +12,9 @@ const log = (...args: any[]) => {
 export default withAuth(
    function middleware(req) {
       // Use the custom logging function
-      log("Request URL:", req.url);
-      log("Token:", req.nextauth.token);
+      const userId = req.url.split("/dashboard/")[1]; // Get userId from URL
+      const requestHeaders = new Headers(req.headers);
+      requestHeaders.set("userId", userId);
 
       const token = req.nextauth.token;
       const isAuth = !!token;
@@ -40,7 +41,11 @@ export default withAuth(
       }
 
       log("Allowing request to proceed");
-      return NextResponse.next();
+      return NextResponse.next({
+         request: {
+            headers: requestHeaders,
+         },
+      });
    },
    {
       callbacks: {

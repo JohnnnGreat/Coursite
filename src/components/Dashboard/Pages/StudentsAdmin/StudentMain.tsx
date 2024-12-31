@@ -11,7 +11,9 @@ const StudentMain = async () => {
             <StudentsSide courses={courses} />
          </div>
 
-         <main className="w-full">Students Main</main>
+         <main className="w-full">
+            
+         </main>
       </div>
    );
 };
