@@ -7,7 +7,6 @@ import React from "react";
 
 const DashboardIndexPage = async () => {
    const session = await getServerSession(authOptions);
-   console.log("jk", session?.user);
 
    if (session?.user?.role == "STUDENT") {
       return <StudentsOverview />;

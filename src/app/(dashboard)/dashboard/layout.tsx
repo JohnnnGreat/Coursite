@@ -14,7 +14,7 @@ const layout = async ({ children }: { children: ReactNode }) => {
 
    return (
       <div className="flex gap-1 h-screen overflow-hidden">
-         <div className="w-[0] md:w-[300px] border-r md:px-[2rem] overflow-hidden">
+         <div className="w-[0] md:w-[300px] border-r md:px-[1rem] overflow-hidden">
             <div className="h-[90px] flex items-center">
                <h1 className="text-[2rem] font-bold">Coursite.</h1>
             </div>
