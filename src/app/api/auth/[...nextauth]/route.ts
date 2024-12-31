@@ -176,8 +176,6 @@ export const authOptions: NextAuthOptions = {
             session.user.role = token.role;
          }
 
-         console.log("Ths is the session", session);
-
          session.user = {
             ...session.user,
             id: token.sub || "",
@@ -196,7 +194,7 @@ export const authOptions: NextAuthOptions = {
    session: {
       strategy: "jwt",
    },
-   secret: process.env.NEXTAUTH_SECRET as string,
+   secret: process.env.NEXTAUTH_SECRET,
    // Add proper error handling
    debug: process.env.NODE_ENV === "development",
 };
