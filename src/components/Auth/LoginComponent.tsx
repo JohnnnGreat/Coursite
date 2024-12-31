@@ -19,10 +19,11 @@ import Link from "next/link";
 import userState from "@/actions/userActions";
 import { ISession } from "./RegisterComponent";
 import { useRouter } from "next/navigation";
+import { Angry } from "lucide-react";
 
-const ILoginResponse = {
-   user: ISession,
-};
+interface ILoginResponse {
+   user: ISession;
+}
 /*
    LOGIN COMPONENT
 */
@@ -54,10 +55,10 @@ function LoginPage() {
       console.log(result);
 
       const session = await getSession();
-      const userInformation = session as typeof ILoginResponse | null;
+      const userInformation = session as any;
 
       // Prepare userinformation to be store in the zustand
-      const userPayload: typeof ILoginResponse = {
+      const userPayload = {
          ...userInformation?.user,
       };
 
