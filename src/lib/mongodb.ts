@@ -1,7 +1,9 @@
 import mongoose from "mongoose";
 
 // MongoDB connection URI
-const MONGO_URI: string = process.env.MONGO_URI || "mongodb://localhost:27017/online-course";
+const MONGO_URI: string =
+   process.env.MONGO_URI ||
+   "mongodb+srv://johnossai20:wJH8hmNOuFDJAUGX@cluster0.becdu.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 
 /**
  * Connect to MongoDB

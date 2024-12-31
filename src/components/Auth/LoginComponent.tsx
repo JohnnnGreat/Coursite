@@ -19,7 +19,9 @@ import Link from "next/link";
 import userState from "@/actions/userActions";
 import { ISession } from "./RegisterComponent";
 import { useRouter } from "next/navigation";
-import { Angry } from "lucide-react";
+import { useState } from "react";
+import { toast } from "react-toastify";
+import { Loader2 } from "lucide-react";
 
 interface ILoginResponse {
    user: ISession;
@@ -28,6 +30,7 @@ interface ILoginResponse {
    LOGIN COMPONENT
 */
 function LoginPage() {
+   const [isLoading, setIsLoading] = useState(false);
    const login = userState((state) => state?.login);
    const router = useRouter();
    const loginForm = useForm<z.infer<typeof loginSchema>>({
@@ -45,6 +48,7 @@ function LoginPage() {
 
    /* CREDENTIALS HANDLER */
    async function onSubmit(values: z.infer<typeof loginSchema>) {
+      setIsLoading(true);
       const result = await signIn("credentials", {
          redirect: false,
          email: values.email,
@@ -52,7 +56,11 @@ function LoginPage() {
          isSignup: false,
       });
 
-      console.log(result);
+      if (!result?.ok) {
+         toast.error(result?.error);
+      } else {
+         toast.success("Login Successfull");
+      }
 
       const session = await getSession();
       const userInformation = session as any;
@@ -64,10 +72,11 @@ function LoginPage() {
 
       login(userPayload);
       router.push("/dashboard");
+      setIsLoading(false);
    }
    return (
-      <div className="h-screen flex items-center justify-center">
-         <div className="w-[600px]">
+      <div className="h-screen flex items-center justify-center p-4">
+         <div className="w-full md:w-[500px]">
             <h1 className="text-[3rem] font-bold">Welcome Back!</h1>
             <p className="text-[#000]/70">
                We're glad to have you back. Sign in to continue where you left off.
@@ -111,9 +120,17 @@ function LoginPage() {
                   />
                   <Button
                      type="submit"
-                     className="mt-[1rem]"
+                     className="mt-4 w-full"
+                     disabled={isLoading}
                   >
-                     Submit
+                     {isLoading ? (
+                        <div className="flex gap-2 items-center">
+                           <Loader2 className="animate-spin" />
+                           Please wait...
+                        </div>
+                     ) : (
+                        "Login"
+                     )}
                   </Button>
                   <div className="flex gap-[1rem] items-center my-[2rem]">
                      <div className="w-[100%] h-[1px] bg-[#000]/20"></div>
@@ -134,7 +151,7 @@ function LoginPage() {
                <p>
                   <Link
                      className="underline hover:decoration-transparent"
-                     href="/login"
+                     href="/register"
                   >
                      Create an Account
                   </Link>{" "}
