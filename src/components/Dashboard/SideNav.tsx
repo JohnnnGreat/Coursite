@@ -111,7 +111,7 @@ const DashboardNav = ({ userRole }: { userRole: string }) => {
          </nav>
 
          {/* Mobile Bottom Navigation */}
-         <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-2 py-2">
+         <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white z-[40] border-t border-gray-200 px-2 py-2">
             <div className="flex justify-around items-center">
                {links.slice(0, 4).map((link) => (
                   <NavLink
