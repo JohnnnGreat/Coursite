@@ -1,4 +1,5 @@
 // middleware.ts
+import { url } from "inspector";
 import { withAuth } from "next-auth/middleware";
 import { NextResponse } from "next/server";
 
@@ -19,19 +20,23 @@ export default withAuth(
          req.nextUrl.pathname.startsWith("/login") || req.nextUrl.pathname.startsWith("/register");
       const isAdminPage = req.nextUrl.pathname.startsWith("/dashboard");
       const isTeacherPage = req.nextUrl.pathname.startsWith("/teacher");
-
+      const isInstructorCreate = req.nextUrl.pathname.startsWith("/dashboard/courses/create");
       log("Is Auth:", isAuth);
       log("Is Auth Page:", isAuthPage);
       log("Is Admin Page:", isAdminPage);
       log("Is Teacher Page:", isTeacherPage);
       log("User Role:", token?.role);
 
+      console.log("Current", req.nextUrl.pathname);
+
       // Handle authenticated users visiting auth pages
       if (isAuthPage && isAuth) {
          log("Redirecting authenticated user from auth page to dashboard");
          return NextResponse.redirect(new URL("/dashboard", req.url));
       }
-      console.log(token?.role);
+      if (token?.role !== "INSTRUCTOR" && isInstructorCreate) {
+         return NextResponse.redirect(new URL("/dashboard/courses", req.url));
+      }
 
       // Handle admin route protection
       if (!isAuth) {
