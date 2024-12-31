@@ -14,7 +14,6 @@ import { cn } from "@/lib/utils";
 import debounce from "lodash/debounce";
 import { CourseInfo } from "@/actions/courseActions";
 
-
 interface CourseSearchProps {
    courses: CourseInfo[];
    onCourseSelect?: (course: CourseInfo) => void;
@@ -29,10 +28,9 @@ const CourseSearch: React.FC<CourseSearchProps> = ({ courses, onCourseSelect, cl
    const [filteredCourses, setFilteredCourses] = useState<CourseInfo[]>([]);
    const [isLoading, setIsLoading] = useState<boolean>(false);
    const [recentSearches, setRecentSearches] = useState<string[]>(() => {
-      const saved = localStorage.getItem("recentSearches");
+      const saved = localStorage?.getItem("recentSearches");
       return saved ? JSON.parse(saved) : [];
    });
-
 
    const highlightText = (text: string, query: string) => {
       if (!query) return text;

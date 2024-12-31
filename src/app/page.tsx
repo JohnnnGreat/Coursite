@@ -144,7 +144,7 @@ async function ProfilePage() {
                      </div>
                      <div>
                         <img
-                           src="/api/placeholder/600/400"
+                           src="/creat.png"
                            alt="How It Works"
                            className="rounded-lg shadow-xl"
                         />

@@ -22,8 +22,8 @@ export default withAuth(
       const isAdminPage = req.nextUrl.pathname.startsWith("/dashboard");
       const isTeacherPage = req.nextUrl.pathname.startsWith("/teacher");
       const isInstructorCreate = req.nextUrl.pathname.startsWith("/dashboard/courses/create");
-      
 
+      console.log("token-ins", token.role, isInstructorCreate);
       // Handle authenticated users visiting auth pages
       if (isAuthPage && isAuth) {
          log("Redirecting authenticated user from auth page to dashboard");
