@@ -5,7 +5,7 @@ import { Menu, X, ChevronDown } from "lucide-react";
 const Header = () => {
    const [isOpen, setIsOpen] = React.useState(false);
    return (
-      <header className="bg-white border-b border-gray-100 fixed w-full top-0 z-50">
+      <header className="bg-white border-b border-gray-100  w-full top-0 z-50">
          <nav className="max-w-[1100px] mx-auto px-6 py-4">
             <div className="flex justify-between items-center">
                {/* Logo */}

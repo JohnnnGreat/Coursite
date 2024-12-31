@@ -14,10 +14,10 @@ declare module "next-auth" {
    interface Session {
       user: {
          id: string;
-         name?: string;
-         email?: string;
-         image?: string;
-         role?: UserRole;
+         name?: string | any;
+         email?: string | any;
+         image?: string | any;
+         role?: UserRole | any;
       };
    }
 
@@ -167,7 +167,7 @@ export const authOptions: NextAuthOptions = {
          return token;
       },
 
-      async session({ session, token }) {
+      async session({ session, token, user }) {
          console.log("jwt", token);
          if (token.sub) {
             session.user.id = token.sub;
@@ -175,6 +175,17 @@ export const authOptions: NextAuthOptions = {
          if (token.role) {
             session.user.role = token.role;
          }
+
+         console.log("Ths is the session", session);
+
+         session.user = {
+            ...session.user,
+            id: token.sub || "",
+            role: token?.role || "STUDENT",
+            // Add any other fields you need
+            name: token.name,
+            email: token.email,
+         };
          return session;
       },
    },

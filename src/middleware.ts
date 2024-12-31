@@ -1,6 +1,7 @@
 // middleware.ts
 import { url } from "inspector";
 import { withAuth } from "next-auth/middleware";
+import { redirect } from "next/dist/server/api-utils";
 import { NextResponse } from "next/server";
 
 // Custom logging function for Edge Runtime
@@ -21,13 +22,7 @@ export default withAuth(
       const isAdminPage = req.nextUrl.pathname.startsWith("/dashboard");
       const isTeacherPage = req.nextUrl.pathname.startsWith("/teacher");
       const isInstructorCreate = req.nextUrl.pathname.startsWith("/dashboard/courses/create");
-      log("Is Auth:", isAuth);
-      log("Is Auth Page:", isAuthPage);
-      log("Is Admin Page:", isAdminPage);
-      log("Is Teacher Page:", isTeacherPage);
-      log("User Role:", token?.role);
-
-      console.log("Current", req.nextUrl.pathname);
+      
 
       // Handle authenticated users visiting auth pages
       if (isAuthPage && isAuth) {
@@ -51,6 +46,7 @@ export default withAuth(
       callbacks: {
          authorized: ({ token }) => {
             log("Authorization check for token:", !!token);
+
             return !!token;
          },
       },
@@ -58,12 +54,5 @@ export default withAuth(
 );
 
 export const config = {
-   matcher: [
-      "/dashboard/:path*",
-      "/admin/:path*",
-      "/teacher/:path*",
-      "/profile/:path*",
-      "/login",
-      "/register",
-   ],
+   matcher: ["/dashboard/:path*", "/admin/:path*", "/teacher/:path*", "/profile/:path*"],
 };

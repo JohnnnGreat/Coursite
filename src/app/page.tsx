@@ -9,43 +9,61 @@ import {
    Play,
    ChevronRight,
 } from "lucide-react";
+import Link from "next/link";
 // In a server component
 async function ProfilePage() {
-   const session = await getServerSession(authOptions);
-
-   if (!session) {
-      return <p>Please log in</p>;
-   }
-
    return (
       <>
          <div className="min-h-screen">
             {/* Hero Section */}
-            <section className="bg-gradient-to-r h-screen flex items-center from-blue-600 to-indigo-700 text-white">
-               <div className="max-w-[1100px] mx-auto px-6 py-24">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-                     <div>
-                        <h1 className="text-4xl md:text-6xl font-bold mb-6">
-                           Share Your Knowledge, Transform Lives
-                        </h1>
-                        <p className="text-lg mb-8">
-                           Create and share courses effortlessly. Connect with learners worldwide
-                           and make an impact.
-                        </p>
-                        <div className="flex gap-4">
-                           <button className="bg-white text-blue-600 px-6 py-3 rounded-lg font-semibold flex items-center gap-2 hover:bg-gray-100">
-                              Start Teaching <ArrowRight className="w-5 h-5" />
-                           </button>
-                           <button className="border border-white px-6 py-3 rounded-lg font-semibold flex items-center gap-2 hover:bg-white/10">
-                              Browse Courses <ChevronRight className="w-5 h-5" />
-                           </button>
-                        </div>
+            <section className="bg-gradient-to-r from-blue-600 via-indigo-600 to-indigo-700 text-white min-h-[85vh] flex items-center justify-center relative overflow-hidden">
+               {/* Background decorative elements */}
+               <div className="absolute inset-0">
+                  <div className="absolute top-0 left-0 w-72 h-72 bg-white/5 rounded-full -translate-x-1/2 -translate-y-1/2 blur-3xl"></div>
+                  <div className="absolute bottom-0 right-0 w-96 h-96 bg-blue-500/10 rounded-full translate-x-1/3 translate-y-1/3 blur-3xl"></div>
+               </div>
+
+               <div className="max-w-[1100px] mx-auto px-6 py-24 relative z-10">
+                  <div className="flex flex-col items-center text-center space-y-8">
+                     {/* Eyebrow text */}
+                     <span className="px-4 py-1.5 bg-white/10 text-sm font-medium rounded-full">
+                        Launching Something Special 🚀
+                     </span>
+
+                     {/* Main heading with gradient */}
+                     <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 bg-clip-text">
+                        Share Your Knowledge,
+                        <br />
+                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-200 to-white">
+                           Transform Lives
+                        </span>
+                     </h1>
+
+                     {/* Subheading */}
+                     <p className="text-lg md:text-xl text-blue-100 max-w-2xl">
+                        Create and share courses effortlessly. Connect with learners worldwide and
+                        make an impact.
+                     </p>
+
+                     {/* CTA Buttons */}
+                     <div className="flex flex-col sm:flex-row gap-4 mt-8">
+                        <Link
+                           href="/dashboard"
+                           className="bg-white text-blue-600 px-8 py-4 rounded-lg font-semibold flex items-center justify-center gap-2 hover:bg-blue-50 transition-all shadow-lg shadow-blue-500/25"
+                        >
+                           Start Teaching <ArrowRight className="w-5 h-5" />
+                        </Link>
+                        <button className="border-2 border-white/30 px-8 py-4 rounded-lg font-semibold flex items-center justify-center gap-2 hover:bg-white/10 transition-all backdrop-blur-sm">
+                           Browse Courses <ChevronRight className="w-5 h-5" />
+                        </button>
                      </div>
-                     <div className="hidden md:block">
+
+                     {/* Featured Image */}
+                     <div className="mt-16 md:mt-24 w-full max-w-4xl mx-auto">
                         <img
-                           src="/api/placeholder/600/400"
+                           src="/image.png"
                            alt="Learning Platform"
-                           className="rounded-lg shadow-xl"
+                           className="rounded-xl shadow-2xl shadow-blue-500/20 border border-white/10 w-full"
                         />
                      </div>
                   </div>

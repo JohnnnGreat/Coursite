@@ -54,7 +54,7 @@ const DashboardNav = ({ userRole }: { userRole: string }) => {
 
    const studentLinks = [
       {
-         href: "/dashboard/learning",
+         href: "/dashboard",
          label: "Learning",
          icon: GraduationCap,
       },
