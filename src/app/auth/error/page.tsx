@@ -1,9 +1,9 @@
-// app/auth/error/page.tsx
 "use client";
 
 import { useSearchParams } from "next/navigation";
+import React, { Suspense } from "react";
 
-const ErrorPage = () => {
+const ErrorPageContent = () => {
    const searchParams = useSearchParams();
    const error = searchParams.get("error"); // Capture error from URL query params
 
@@ -19,5 +19,11 @@ const ErrorPage = () => {
       </div>
    );
 };
+
+const ErrorPage = () => (
+   <Suspense fallback={<div>Loading...</div>}>
+      <ErrorPageContent />
+   </Suspense>
+);
 
 export default ErrorPage;
