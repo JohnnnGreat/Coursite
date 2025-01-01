@@ -7,7 +7,6 @@ import bcrypt from "bcryptjs";
 import NextAuth from "next-auth";
 import connectDB from "@/lib/mongodb";
 
-console.log("token", process.env.NEXTAUTH_SECRET);
 
 // Type declarations
 declare module "next-auth" {
