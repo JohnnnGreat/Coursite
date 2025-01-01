@@ -2,6 +2,7 @@ import { headers } from "next/headers";
 import { getCourseById } from "@/serverActions/course";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
+import VideoPlayer from "@/components/Dashboard/Pages/Files/Playvideo";
 import {
    Accordion,
    AccordionContent,
@@ -124,20 +125,16 @@ const CoursePage = async () => {
                                           </span>
                                        </CardHeader>
                                        <CardContent className="space-y-4">
-                                          {lesson.content && (
+                                          {lesson.description && (
                                              <p className="text-gray-600">{lesson.content}</p>
                                           )}
 
-                                          {lesson.resourceUrl && (
+                                          {lesson?.resourceUrl && (
                                              <div className="flex items-center gap-2 text-blue-600 hover:underline">
-                                                <Link className="h-4 w-4" />
-                                                <a
-                                                   href={lesson.resourceUrl}
-                                                   target="_blank"
-                                                   rel="noopener noreferrer"
-                                                >
-                                                   View Resource
-                                                </a>
+                                                <VideoPlayer
+                                                   url={lesson?.resourceUrl}
+                                                   width="xl"
+                                                />
                                              </div>
                                           )}
 
@@ -145,17 +142,21 @@ const CoursePage = async () => {
                                              <div className="flex items-center gap-2">
                                                 <CheckCircle
                                                    className={`h-5 w-5 ${
-                                                      isCompleted
+                                                      lesson.isCompleted
                                                          ? "text-green-500"
                                                          : "text-gray-300"
                                                    }`}
                                                 />
                                                 <span className="text-sm">
-                                                   {isCompleted ? "Completed" : "Mark as complete"}
+                                                   {lesson.isCompleted ? (
+                                                      "Completed"
+                                                   ) : (
+                                                      <button>Mark as Complete</button>
+                                                   )}
                                                 </span>
                                              </div>
                                              <Progress
-                                                value={isCompleted ? 100 : 0}
+                                                value={lesson.isCompleted ? 100 : 0}
                                                 className="w-24 h-2"
                                              />
                                           </div>

@@ -46,6 +46,11 @@ const DashboardNav = ({ userRole }: { userRole: string }) => {
          icon: BarChart,
       },
       {
+         href: "/dashboard/files",
+         label: "Files",
+         icon: BarChart,
+      },
+      {
          href: "/settings",
          label: "Settings",
          icon: Settings,

@@ -24,12 +24,10 @@ const LessonSchema: Schema<ILesson> = new Schema({
       ref: "Section",
       required: true,
    },
-   completion: [
-      {
-         type: mongoose.Schema.Types.ObjectId,
-         ref: "LessonCompletion",
-      },
-   ],
+   completed: {
+      type: Boolean,
+      default: false,
+   },
 });
 
 export const Lesson = mongoose.models.Lesson || mongoose.model<ILesson>("Lesson", LessonSchema);

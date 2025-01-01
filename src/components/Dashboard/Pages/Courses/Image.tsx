@@ -6,6 +6,24 @@ import { AlertCircle, Upload, X, Image as ImageIcon } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import Cropper from "react-easy-crop";
 import { Slider } from "@/components/ui/slider";
+import useCourseInformation from "@/actions/courseActions";
+import { Client, ID, Storage, Account } from "appwrite";
+
+const client = new Client()
+   .setEndpoint("https://cloud.appwrite.io/v1")
+   .setProject("67408c6e0002b22feb6a");
+
+const storage = new Storage(client);
+const account = new Account(client);
+
+const authenticateAnonymously = async () => {
+   try {
+      // Create anonymous session
+      await account.createAnonymousSession();
+   } catch (error) {
+      console.error("Authentication error:", error);
+   }
+};
 
 interface Point {
    x: number;
@@ -27,7 +45,8 @@ const ImageUpload = () => {
    const [error, setError] = useState<string | null>(null);
    const [isCropping, setIsCropping] = useState(false);
 
-   const onDrop = useCallback((acceptedFiles: File[]) => {
+   const { addToCoursePayload, courseInformation } = useCourseInformation((state) => state);
+   const onDrop = useCallback(async (acceptedFiles: File[]) => {
       setError(null);
 
       const file = acceptedFiles[0];
@@ -60,6 +79,44 @@ const ImageUpload = () => {
          img.src = reader.result as string;
       };
       reader.readAsDataURL(file);
+
+      const formData = new FormData();
+      formData.append("file", file);
+
+      // const response = fetch("https://appwrite-express-file-upload.onrender.com/upload", {
+      //    method: "POST",
+
+      //    body: formData,
+      // })
+      //    .then((res) => {
+      //       console.log(res);
+      //       if (!res.ok) {
+      //          throw new Error(`HTTP error! status: ${res.status}`);
+      //       }
+      //       return res.json(); // Parse JSON response
+      //    })
+      //    .then((data) => {
+      //       const { fileUrl } = data;
+      //       addToCoursePayload({ imageUrl: fileUrl });
+      //    })
+      //    .catch((error) => {
+      //       console.error("Error uploading file:", error);
+      //    });
+
+      const fileId = ID.unique();
+
+      // Upload file to Appwrite storage
+      const response = storage
+         .createFile(
+            "67409170002d4b8b36b4", // Replace with your bucket ID
+            fileId,
+            file,
+         )
+         .then((response) => {
+            console.log(response);
+            const fileUrl = storage.getFileView("67409170002d4b8b36b4", response.$id);
+            console.log(fileUrl);
+         });
    }, []);
 
    const { getRootProps, getInputProps, isDragActive } = useDropzone({

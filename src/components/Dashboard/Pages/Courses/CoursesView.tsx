@@ -52,7 +52,10 @@ const CoursesView = ({ courses }: { courses: CourseInfo[] }) => {
                      >
                         <div>
                            <img
-                              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQzb-tHLTy_x3v4ZB57K-ufNqxXyHPT3AARmQ&s"
+                              src={
+                                 course?.imageUrl ||
+                                 "https://i0.wp.com/lanecdr.org/wp-content/uploads/2019/08/placeholder.png?fit=1200%2C800&ssl=1"
+                              }
                               alt={`Image for ${course.title}`}
                               className="w-full rounded-md object-cover"
                            />
@@ -71,7 +74,11 @@ const CoursesView = ({ courses }: { courses: CourseInfo[] }) => {
                                  </DropdownMenuTrigger>
                                  <DropdownMenuContent className="w-48 shadow-lg">
                                     <DropdownMenuItem>Remove from page</DropdownMenuItem>
-                                    <DropdownMenuItem>View Post</DropdownMenuItem>
+                                    <DropdownMenuItem>
+                                       <Link href={`/dashboard/courses/${course._id}`}>
+                                          View Course
+                                       </Link>
+                                    </DropdownMenuItem>
                                     <DropdownMenuItem>View Post's Analytics</DropdownMenuItem>
                                  </DropdownMenuContent>
                               </DropdownMenu>

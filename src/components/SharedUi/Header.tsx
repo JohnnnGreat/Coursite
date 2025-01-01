@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import { Menu, X, ChevronDown } from "lucide-react";
+import Link from "next/link";
 
 const Header = () => {
    const [isOpen, setIsOpen] = React.useState(false);
@@ -14,7 +15,7 @@ const Header = () => {
                      href="/"
                      className="text-2xl font-bold text-blue-600"
                   >
-                     LearnHub
+                     Coursite.
                   </a>
                </div>
 
@@ -46,24 +47,24 @@ const Header = () => {
                         </a>
                      </div>
                   </div>
-                  <a
-                     href="#"
+                  <Link
+                     href="/teaching"
                      className="text-gray-600 hover:text-gray-900"
                   >
                      Teach
-                  </a>
-                  <a
-                     href="#"
+                  </Link>
+                  <Link
+                     href="/community"
                      className="text-gray-600 hover:text-gray-900"
                   >
                      Community
-                  </a>
-                  <a
-                     href="#"
+                  </Link>
+                  <Link
+                     href="/about"
                      className="text-gray-600 hover:text-gray-900"
                   >
                      About
-                  </a>
+                  </Link>
                </div>
 
                {/* Auth Buttons */}
@@ -75,7 +76,7 @@ const Header = () => {
                      Login
                   </a>
                   <a
-                     href="/signup"
+                     href="/register"
                      className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
                   >
                      Sign Up
@@ -104,24 +105,24 @@ const Header = () => {
                   >
                      Courses
                   </a>
-                  <a
-                     href="#"
+                  <Link
+                     href="/teaching"
                      className="block py-2 text-gray-600 hover:text-gray-900"
                   >
                      Teach
-                  </a>
-                  <a
-                     href="#"
+                  </Link>
+                  <Link
+                     href="/community"
                      className="block py-2 text-gray-600 hover:text-gray-900"
                   >
                      Community
-                  </a>
-                  <a
-                     href="#"
+                  </Link>
+                  <Link
+                     href="/about"
                      className="block py-2 text-gray-600 hover:text-gray-900"
                   >
                      About
-                  </a>
+                  </Link>
                   <div className="mt-4 space-y-2">
                      <a
                         href="/login"
