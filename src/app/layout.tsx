@@ -1,32 +1,33 @@
+"use client";
 import Header from "@/components/SharedUi/Header";
 import GlobalErrorHandler from "./error";
 import { ToastContainer, toast } from "react-toastify";
 import "./globals.css";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import { redirect } from "next/navigation";
+import { useRouter } from "next/navigation";
+import userState from "@/actions/userActions";
+import { useEffect } from "react";
 
-export const metadata = {
-   title: "Skill Gap Assessment Tool",
-   description: "A SaaS for identifying skill gaps",
-};
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+   const { user } = userState((state) => state);
+   const router = useRouter();
 
-export default async function RootLayout({ children }: { children: React.ReactNode }) {
-   const session = await getServerSession(authOptions);
-
-   if (session?.user) {
-      redirect("/dashboard");
-   }
+   useEffect(() => {
+      if (user) {
+         router.push("/dashboard");
+      }
+   }, [user]);
 
    return (
       <GlobalErrorHandler>
          <html lang="en">
             <body>
-               {!session?.user && <Header />}
+               {!user && <Header />}
 
                <div>{children}</div>
 
-               {!session?.user && (
+               {!user && (
                   <footer className="bg-gray-900 text-white">
                      <div className="container mx-auto px-6 py-12">
                         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">

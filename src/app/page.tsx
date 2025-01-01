@@ -61,7 +61,7 @@ async function ProfilePage() {
                      {/* Featured Image */}
                      <div className="mt-16 md:mt-24 w-full max-w-4xl mx-auto">
                         <img
-                           src="/image.png"
+                           src="/sh.jpeg"
                            alt="Learning Platform"
                            className="rounded-xl shadow-2xl shadow-blue-500/20 border border-white/10 w-full"
                         />
