@@ -6,18 +6,30 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { useRouter } from "next/navigation";
 import userState from "@/actions/userActions";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { getSession, signIn, signOut } from "next-auth/react";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-   const { user } = userState((state) => state);
+   const [user, setUser] = useState(null);
+
    const router = useRouter();
+
+   useEffect(() => {
+      async function getUser() {
+         const session = await getSession();
+         if (session?.user) {
+            setUser(session?.user);
+         }
+      }
+
+      getUser();
+   }, []);
 
    useEffect(() => {
       if (user) {
          router.push("/dashboard");
       }
    }, [user]);
-
    return (
       <html lang="en">
          <body>
