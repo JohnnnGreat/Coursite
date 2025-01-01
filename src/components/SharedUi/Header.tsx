@@ -2,9 +2,23 @@
 import React from "react";
 import { Menu, X, ChevronDown } from "lucide-react";
 import Link from "next/link";
+import { getSession } from "next-auth/react";
 
 const Header = () => {
    const [isOpen, setIsOpen] = React.useState(false);
+
+   const [user, setUser] = React.useState(null);
+
+   React.useEffect(() => {
+      async function getUser() {
+         const session = await getSession();
+         if (session?.user) {
+            setUser(session?.user);
+         }
+      }
+
+      getUser();
+   }, []);
    return (
       <header className="bg-white border-b border-gray-100  w-full top-0 z-50">
          <nav className="max-w-[1100px] mx-auto px-6 py-4">
@@ -67,21 +81,30 @@ const Header = () => {
                   </Link>
                </div>
 
-               {/* Auth Buttons */}
-               <div className="hidden md:flex items-center space-x-4">
-                  <a
-                     href="/login"
-                     className="text-gray-600 hover:text-gray-900"
-                  >
-                     Login
-                  </a>
-                  <a
-                     href="/register"
+               {user ? (
+                  <Link
+                     href="/dashboard"
                      className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
                   >
-                     Sign Up
-                  </a>
-               </div>
+                     Dashboard
+                  </Link>
+               ) : (
+                  <div className="hidden md:flex items-center space-x-4">
+                     <Link
+                        href="/login"
+                        className="text-gray-600 hover:text-gray-900"
+                     >
+                        Login
+                     </Link>
+                     <Link
+                        href="/register"
+                        className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
+                     >
+                        Sign Up
+                     </Link>
+                  </div>
+               )}
+               {/* Auth Buttons */}
 
                {/* Mobile Menu Button */}
                <button

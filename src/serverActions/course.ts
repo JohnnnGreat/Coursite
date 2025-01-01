@@ -281,6 +281,7 @@ export const getRecentCourses = async () => {
                name: course.authorId?.name ?? "Unknown Author",
                avatar: course.authorId?.avatar ?? "/api/placeholder/32/32",
             },
+            description: course.description,
             enrollments: course?.enrollments.map((enrollment) => enrollment.userId.toString()),
          })),
          message: "Recent Courses Fetched",

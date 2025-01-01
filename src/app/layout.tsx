@@ -7,7 +7,7 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { useRouter } from "next/navigation";
 import userState from "@/actions/userActions";
 import { useEffect, useState } from "react";
-import { getSession, signIn, signOut } from "next-auth/react";
+import { getSession} from "next-auth/react";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
    const [user, setUser] = useState(null);
