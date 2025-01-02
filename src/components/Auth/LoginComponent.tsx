@@ -40,11 +40,26 @@ function LoginPage() {
          password: "",
       },
    });
+   const [googleLoading, setGoogleLoading] = useState(false);
 
    /* GOOGLE HANDLER */
    const handleGoogleLogin = async () => {
+      console.log("this is called");
+      setGoogleLoading(true);
       const res = await signIn("google", { callbackUrl: "/dashboard" });
-      console.log(res);
+
+      const session = await getSession();
+      const userInformation = session as any;
+
+      // Prepare userinformation to be store in the zustand
+      const userPayload = {
+         ...userInformation?.user,
+      };
+
+      login(userPayload);
+      console.log("respons", res);
+      setGoogleLoading(true);
+      console.log("this is called end");
    };
 
    /* CREDENTIALS HANDLER */
