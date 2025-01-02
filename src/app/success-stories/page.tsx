@@ -6,7 +6,7 @@ const SuccessStoriesPage = () => {
       {
          name: "Sarah Johnson",
          role: "Web Developer at Google",
-         image: "/api/placeholder/80/80",
+         image: "https://png.pngtree.com/png-clipart/20210915/ourlarge/pngtree-avatar-placeholder-abstract-white-blue-green-png-image_3918476.jpg",
          course: "Full Stack Development",
          story: "After completing the web development path, I landed my dream job at Google. The practical projects and mentor support made all the difference.",
          achievement: "Secured position at top tech company",
@@ -15,7 +15,7 @@ const SuccessStoriesPage = () => {
       {
          name: "Michael Chen",
          role: "Data Scientist",
-         image: "/api/placeholder/80/80",
+         image: "https://png.pngtree.com/png-clipart/20210915/ourlarge/pngtree-avatar-placeholder-abstract-white-blue-green-png-image_3918476.jpg",
          course: "Data Science Bootcamp",
          story: "The structured learning approach and real-world projects helped me transition from finance to data science in just 6 months.",
          achievement: "Career transition success",
@@ -24,7 +24,7 @@ const SuccessStoriesPage = () => {
       {
          name: "Emma Davis",
          role: "Freelance Designer",
-         image: "/api/placeholder/80/80",
+         image: "https://png.pngtree.com/png-clipart/20210915/ourlarge/pngtree-avatar-placeholder-abstract-white-blue-green-png-image_3918476.jpg",
          course: "UI/UX Design",
          story: "The skills I learned allowed me to start my own freelance business. I now work with clients worldwide and have tripled my income.",
          achievement: "Started successful business",

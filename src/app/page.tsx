@@ -191,7 +191,7 @@ async function ProfilePage() {
                         >
                            <div className="flex items-center gap-4 mb-6">
                               <img
-                                 src={`/api/placeholder/64/64`}
+                                 src={`https://png.pngtree.com/png-clipart/20210915/ourlarge/pngtree-avatar-placeholder-abstract-white-blue-green-png-image_3918476.jpg`}
                                  alt="User"
                                  className="w-16 h-16 rounded-full"
                               />
