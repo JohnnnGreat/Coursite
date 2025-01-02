@@ -42,8 +42,9 @@ function LoginPage() {
    });
 
    /* GOOGLE HANDLER */
-   const handleGoogleLogin = () => {
-      signIn("google", { callbackUrl: "/dashboard" });
+   const handleGoogleLogin = async () => {
+      const res = await signIn("google", { callbackUrl: "/dashboard" });
+      console.log(res);
    };
 
    /* CREDENTIALS HANDLER */
@@ -138,7 +139,11 @@ function LoginPage() {
                      <div className="w-[100%] h-[1px] bg-[#000]/20"></div>
                   </div>
                   <div className="w-full flex items-center justify-center">
-                     <button className="border border-gray-100 flex w-full items-center justify-center gap-[1rem] rounded-[10px] p-[.7rem]">
+                     <button
+                        type="button"
+                        onClick={handleGoogleLogin}
+                        className="border border-gray-100 flex w-full items-center justify-center gap-[1rem] rounded-[10px] p-[.7rem]"
+                     >
                         <FcGoogle className="size-8" />
                         <p>Continue with Google</p>
                      </button>

@@ -7,7 +7,6 @@ import bcrypt from "bcryptjs";
 import NextAuth from "next-auth";
 import connectDB from "@/lib/mongodb";
 
-
 // Type declarations
 declare module "next-auth" {
    interface Session {
@@ -159,6 +158,7 @@ export const authOptions: NextAuthOptions = {
             const dbUser = await User.findOne({ email: token.email });
             if (dbUser) {
                token.role = dbUser.role;
+               token.id = dbUser._id.toString();
             }
          }
 
@@ -175,7 +175,7 @@ export const authOptions: NextAuthOptions = {
 
          session.user = {
             ...session.user,
-            id: token.sub || "",
+            id: token.id || "",
             role: token?.role || "STUDENT",
             // Add any other fields you need
             name: token.name,
@@ -186,7 +186,6 @@ export const authOptions: NextAuthOptions = {
    },
    pages: {
       signIn: "/login",
-     
    },
    session: {
       strategy: "jwt",

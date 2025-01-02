@@ -10,6 +10,7 @@ import {
    Settings,
    GraduationCap,
    Menu,
+   FileText,
    X,
 } from "lucide-react";
 
@@ -48,7 +49,7 @@ const DashboardNav = ({ userRole }: { userRole: string }) => {
       {
          href: "/dashboard/files",
          label: "Files",
-         icon: BarChart,
+         icon: FileText,
       },
       {
          href: "/settings",
@@ -118,7 +119,7 @@ const DashboardNav = ({ userRole }: { userRole: string }) => {
          {/* Mobile Bottom Navigation */}
          <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white z-[40] border-t border-gray-200 px-2 py-2">
             <div className="flex justify-around items-center">
-               {links.slice(0, 4).map((link) => (
+               {links.slice(0, 5).map((link) => (
                   <NavLink
                      key={link.href}
                      link={link}

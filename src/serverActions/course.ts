@@ -491,6 +491,8 @@ export const getStudentEnrolledCourses = async (): Promise<GetAllCourseResponse>
       if (!session || !session.user || !session.user.id) {
          throw new Error("Unauthorized: No user session found");
       }
+
+      console.log(session);
       const userId = session.user.id;
 
       const enrollments = await Enrollment.find({ userId: userId }).populate({

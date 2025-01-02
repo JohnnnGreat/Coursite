@@ -15,6 +15,7 @@ import FeaturedCourses from "@/components/SharedUi/Courses";
 async function ProfilePage() {
    return (
       <>
+         <title>Cousite</title>
          <div className="min-h-screen">
             {/* Hero Section */}
             <section className="bg-gradient-to-r from-blue-600 via-indigo-600 to-indigo-700 text-white min-h-[85vh] flex items-center justify-center relative overflow-hidden">

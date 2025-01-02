@@ -17,6 +17,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { FcGoogle } from "react-icons/fc";
 import Link from "next/link";
 import userState from "@/actions/userActions";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { toast } from "react-toastify";
+import { Loader2 } from "lucide-react";
 
 export interface ISession {
    name?: string | undefined;
@@ -29,6 +33,9 @@ export interface ISession {
    REGISTER COMPONENT
 */
 function RegisterComponent() {
+   const [isLoading, setIsLoading] = useState(false);
+   const login = userState((state) => state?.login);
+   const router = useRouter();
    const registerForm = useForm<z.infer<typeof registerSchema>>({
       resolver: zodResolver(registerSchema),
       defaultValues: {
@@ -45,7 +52,7 @@ function RegisterComponent() {
 
    /* CREDENTIALS HANDLER */
    async function onSubmit(values: z.infer<typeof registerSchema>) {
-      const response = await signIn("credentials", {
+      const result = await signIn("credentials", {
          redirect: false,
          name: values.name,
          email: values.email,
@@ -53,11 +60,27 @@ function RegisterComponent() {
          isSignup: true,
       });
 
-      console.log(response);
+      if (!result?.ok) {
+         toast.error(result?.error);
+      } else {
+         toast.success("Login Successfull");
+      }
+
+      const session = await getSession();
+      const userInformation = session as any;
+
+      // Prepare userinformation to be store in the zustand
+      const userPayload = {
+         ...userInformation?.user,
+      };
+
+      login(userPayload);
+      router.push("/dashboard");
+      setIsLoading(false);
    }
    return (
       <div className="h-screen flex items-center justify-center">
-         <div className="w-[600px]">
+         <div className="w-full md:w-[500px]">
             <h1 className="text-[3rem] font-bold">Welcome to Coursite!</h1>
             <p className="text-[#000]/70">
                Create your account and unlock a world of possibilities.
@@ -117,9 +140,17 @@ function RegisterComponent() {
                   />
                   <Button
                      type="submit"
-                     className="mt-[1rem]"
+                     className="mt-4 w-full"
+                     disabled={isLoading}
                   >
-                     Submit
+                     {isLoading ? (
+                        <div className="flex gap-2 items-center">
+                           <Loader2 className="animate-spin" />
+                           Please wait...
+                        </div>
+                     ) : (
+                        "Register"
+                     )}
                   </Button>
                   <div className="flex gap-[1rem] items-center my-[2rem]">
                      <div className="w-[100%] h-[1px] bg-[#000]/20"></div>
