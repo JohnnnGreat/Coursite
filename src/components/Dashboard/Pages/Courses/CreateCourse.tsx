@@ -57,7 +57,7 @@ const CreateCourse = () => {
    const userInformation = userState((state) => state.user);
 
    return (
-      <div className="max-w-[98%] mx-auto p-6 space-y-6 bg-white">
+      <div className="md:max-w-[98%] mx-auto p-2 md:p-6 space-y-6 bg-white">
          {/* Top Navigation */}
          <div className="flex items-center justify-between bg-white border p-4 rounded-lg shadow-sm">
             <Link
@@ -73,18 +73,22 @@ const CreateCourse = () => {
          </div>
 
          {/* Header Section */}
-         <div className="bg-white p-6 rounded-lg border">
-            <div className="flex justify-between items-start">
+         <div className="bg-white p-4 md:p-6 rounded-lg border">
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center space-y-4 md:space-y-0">
                <div className="space-y-1">
-                  <h1 className="text-3xl font-bold text-gray-900">Create New Course</h1>
-                  <p className="text-gray-500">Fill in the details to create your course</p>
+                  <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
+                     Create New Course
+                  </h1>
+                  <p className="text-gray-500 text-sm md:text-base">
+                     Fill in the details to create your course
+                  </p>
                </div>
-               <div className="flex items-center space-x-4">
+               <div className="flex flex-col md:flex-row items-stretch md:items-center space-y-4 md:space-y-0 md:space-x-4">
                   <Select
                      value={publishState}
                      onValueChange={setPublishState}
                   >
-                     <SelectTrigger className="w-[180px] bg-white">
+                     <SelectTrigger className="w-full md:w-[180px] bg-white">
                         <SelectValue placeholder="Select state" />
                      </SelectTrigger>
                      <SelectContent>
@@ -95,7 +99,7 @@ const CreateCourse = () => {
                   <button
                      onClick={handleSaveInformation}
                      disabled={isLoading}
-                     className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                     className="flex items-center justify-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                      <Save className="w-4 h-4 mr-2" />
                      {isLoading ? "Saving..." : "Save Information"}
@@ -138,7 +142,7 @@ const CreateCourse = () => {
                </TabsList>
 
                <TabsContent value="basic">
-                  <Card>
+                  <div>
                      <CardHeader>
                         <CardTitle>Course Information</CardTitle>
                         <CardDescription>Add the main details of your course</CardDescription>
@@ -177,7 +181,7 @@ const CreateCourse = () => {
 
                            <ImageUpload />
 
-                           <div className="grid grid-cols-2 gap-6">
+                           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                               <div>
                                  <label className="block text-sm font-medium mb-2 text-gray-700">
                                     Category
@@ -220,7 +224,7 @@ const CreateCourse = () => {
                            </div>
                         </div>
                      </CardContent>
-                  </Card>
+                  </div>
                   <Prerequisites />
                </TabsContent>
 
