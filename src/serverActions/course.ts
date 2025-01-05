@@ -404,7 +404,7 @@ export const filterCourses = async (filters: CourseFilters) => {
          ];
       }
 
-      // Filter by categories
+  
       if (filters.categories?.length) {
          query.category = { $in: filters.categories };
       }
@@ -425,14 +425,14 @@ export const filterCourses = async (filters: CourseFilters) => {
          }
       }
 
-      // Filter by minimum rating
+   
       if (filters.rating) {
          query.rating = { $gte: filters.rating };
       }
 
-      // Prepare sort options
+
       let sortOptions: any = {};
-      // switch (filters.sortBy) {
+
       //    case "price_asc":
       //       sortOptions.price = 1;
       //       break;
@@ -457,7 +457,7 @@ export const filterCourses = async (filters: CourseFilters) => {
       const limit = filters.limit || 10;
       const skip = (page - 1) * limit;
 
-      // Execute query with pagination
+    
       const [courses, totalCount] = await Promise.all([
          Course.find(query)
             .sort(sortOptions)

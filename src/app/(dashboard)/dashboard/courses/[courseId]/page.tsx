@@ -25,7 +25,7 @@ const CoursePage = async () => {
    const courseId = await headersList?.get("userId")?.split("/")[1];
 
    const { course } = await getCourseById(courseId);
-   console.log(course);
+
 
    const isCompleted = true;
 

@@ -18,7 +18,7 @@ const account = new Account(client);
 
 const authenticateAnonymously = async () => {
    try {
-      // Create anonymous session
+    
       await account.createAnonymousSession();
    } catch (error) {
       console.error("Authentication error:", error);
@@ -52,13 +52,13 @@ const ImageUpload = () => {
       const file = acceptedFiles[0];
       if (!file) return;
 
-      // Validate file type
+   
       if (!file.type.startsWith("image/")) {
          setError("Please upload an image file");
          return;
       }
 
-      // Validate file size (5MB limit)
+    
       if (file.size > 5 * 1024 * 1024) {
          setError("Image size should be less than 5MB");
          return;
@@ -83,32 +83,12 @@ const ImageUpload = () => {
       const formData = new FormData();
       formData.append("file", file);
 
-      // const response = fetch("https://appwrite-express-file-upload.onrender.com/upload", {
-      //    method: "POST",
-
-      //    body: formData,
-      // })
-      //    .then((res) => {
-      //       console.log(res);
-      //       if (!res.ok) {
-      //          throw new Error(`HTTP error! status: ${res.status}`);
-      //       }
-      //       return res.json(); // Parse JSON response
-      //    })
-      //    .then((data) => {
-      //       const { fileUrl } = data;
-      //       addToCoursePayload({ imageUrl: fileUrl });
-      //    })
-      //    .catch((error) => {
-      //       console.error("Error uploading file:", error);
-      //    });
-
       const fileId = ID.unique();
 
-      // Upload file to Appwrite storage
+ 
       const response = storage
          .createFile(
-            "67409170002d4b8b36b4", // Replace with your bucket ID
+            "67409170002d4b8b36b4", 
             fileId,
             file,
          )
@@ -143,11 +123,11 @@ const ImageUpload = () => {
          const ctx = canvas.getContext("2d");
          if (!ctx) return;
 
-         // Set canvas dimensions to cropped size
+       
          canvas.width = croppedAreaPixels.width;
          canvas.height = croppedAreaPixels.height;
 
-         // Draw the cropped image
+       
          ctx.drawImage(
             img,
             croppedAreaPixels.x,
@@ -160,7 +140,7 @@ const ImageUpload = () => {
             croppedAreaPixels.height,
          );
 
-         // Convert to base64
+
          const croppedImage = canvas.toDataURL("image/jpeg");
          setImage(croppedImage);
          setIsCropping(false);

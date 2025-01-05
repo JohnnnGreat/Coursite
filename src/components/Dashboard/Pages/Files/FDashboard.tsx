@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, ChangeEvent } from "react";
 import { uploadFile, getInstructorFiles, deleteFile } from "@/serverActions/files";
 import {
    FileVideo,
@@ -14,20 +14,43 @@ import {
 } from "lucide-react";
 import { Client, Storage, ID } from "appwrite";
 
+// Appwrite Client and Storage initialization
 const client = new Client()
    .setEndpoint("https://cloud.appwrite.io/v1")
    .setProject("67408c6e0002b22feb6a");
 
 const storage = new Storage(client);
 
-const FilesDashboard = ({ userId }) => {
-   const [files, setFiles] = useState([]);
-   const [isUploading, setIsUploading] = useState(false);
-   const [uploadProgress, setUploadProgress] = useState(0);
-   const [selectedFileType, setSelectedFileType] = useState(null);
-   const [showUploadModal, setShowUploadModal] = useState(false);
+interface FileType {
+   id: string;
+   label: string;
+   description: string;
+   icon: React.ComponentType;
+   accept: string;
+}
 
-   const fileTypes = [
+interface FileInfo {
+   _id?: string;
+   fileName: string;
+   fileUrl: string;
+   fileType: string;
+   fileSize: number;
+   uploadedBy: string;
+   createdAt: string;
+}
+
+interface FilesDashboardProps {
+   userId: string;
+}
+
+const FilesDashboard = ({ userId }: FilesDashboardProps): JSX.Element => {
+   const [files, setFiles] = useState<FileInfo[]>([]);
+   const [isUploading, setIsUploading] = useState<boolean>(false);
+   const [uploadProgress, setUploadProgress] = useState<number>(0);
+   const [selectedFileType, setSelectedFileType] = useState<FileType | null>(null);
+   const [showUploadModal, setShowUploadModal] = useState<boolean>(false);
+
+   const fileTypes: FileType[] = [
       {
          id: "video",
          label: "Course Video",
@@ -67,8 +90,8 @@ const FilesDashboard = ({ userId }) => {
       setFiles(instructorFiles);
    };
 
-   const handleFileUpload = async (event) => {
-      const file = event.target.files[0];
+   const handleFileUpload = async (event: ChangeEvent<HTMLInputElement>) => {
+      const file = event.target.files?.[0];
       if (!file) return;
 
       setIsUploading(true);
@@ -80,14 +103,16 @@ const FilesDashboard = ({ userId }) => {
 
          const fileUrl = storage.getFileView("67409170002d4b8b36b4", response.$id);
 
-         const fileInformation = {
+         const fileInformation: FileInfo = {
             fileName: file.name,
             fileUrl: fileUrl,
             fileType: file.type,
             fileSize: file.size,
             uploadedBy: userId,
+            createdAt: new Date().toISOString(),
          };
-         const { file: uploadedFile } = await uploadFile(fileInformation, userId);
+
+         const { file: uploadedFile } = await uploadFile(fileInformation);
          setFiles((prev) => [uploadedFile, ...prev]);
          setShowUploadModal(false);
          setSelectedFileType(null);
@@ -99,7 +124,7 @@ const FilesDashboard = ({ userId }) => {
       }
    };
 
-   const handleDelete = async (fileId) => {
+   const handleDelete = async (fileId: string) => {
       try {
          await deleteFile(fileId, userId);
          setFiles((prev) => prev.filter((file) => file._id !== fileId));
@@ -108,7 +133,7 @@ const FilesDashboard = ({ userId }) => {
       }
    };
 
-   const formatFileSize = (bytes) => {
+   const formatFileSize = (bytes: number): string => {
       if (bytes === 0) return "0 Bytes";
       const k = 1024;
       const sizes = ["Bytes", "KB", "MB", "GB"];

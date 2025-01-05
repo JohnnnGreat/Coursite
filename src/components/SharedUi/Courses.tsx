@@ -3,7 +3,7 @@ import { getRecentCourses } from "@/serverActions/course";
 const FeaturedCourses = async () => {
    const { courses } = await getRecentCourses();
 
-   console.log(courses);
+
    return (
       <section className="py-20">
          <div className="max-w-[1100px] mx-auto px-6">
