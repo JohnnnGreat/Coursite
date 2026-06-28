@@ -1,294 +1,117 @@
 "use client";
-import React, { useState, useCallback, useEffect } from "react";
-import { Search, Filter, X, ChevronDown, SlidersHorizontal } from "lucide-react";
-import {
-   DropdownMenu,
-   DropdownMenuContent,
-   DropdownMenuItem,
-   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
-   Dialog,
-   DialogContent,
-   DialogHeader,
-   DialogTitle,
-   DialogTrigger,
-} from "@/components/ui/dialog";
-import { Slider } from "@/components/ui/slider";
+import React, { useState, useEffect } from "react";
+import { Search, X, SlidersHorizontal } from "lucide-react";
 import { filterCourses } from "@/serverActions/course";
 
+const CATEGORIES = ["Development", "Data Science", "Design", "Marketing", "Business"];
+const LEVELS = ["Beginner", "Intermediate", "Advanced"];
+
 export default function SearchCourses() {
-   // States for filters
-   const [filters, setFilters] = useState({
-      search: "",
-      categories: [],
-      levels: [],
-      priceRange: [0, 100],
-      duration: [],
-      sort: "popular",
-   });
+   const [search, setSearch] = useState("");
+   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+   const [selectedLevels, setSelectedLevels] = useState<string[]>([]);
+   const [showFilters, setShowFilters] = useState(false);
 
-   const [activeFilters, setActiveFilters] = useState([]);
-
-   // Toggle filter selection
-   const toggleFilter = (type: string, value: string | any) => {
-      setFilters((prev) => {
-         const current = prev[type];
-         const updated = current.includes(value)
-            ? current.filter((item: any) => item !== value)
-            : [...current, value];
-         return { ...prev, [type]: updated };
-      });
+   const toggleItem = (arr: string[], item: string, setter: (v: string[]) => void) => {
+      setter(arr.includes(item) ? arr.filter((i) => i !== item) : [...arr, item]);
    };
 
-   const [filterResults, setFilterResults] = useState([]);
+   const hasActiveFilters = selectedCategories.length > 0 || selectedLevels.length > 0;
 
-   useEffect(() => {
-      async function filterResults() {
-         const results = await filterCourses({
-            search: filters?.search,
-            categories: filters?.categories,
-            levels: filters?.levels,
-            priceRange: {
-               min: 0,
-               max: 10000,
-            },
-            //  sortBy: selectedSort,
-            //  page: currentPage,
-            //  limit: 12,
-         });
-         console.log(results?.courses);
-         if (results?.courses.length > 0) {
-            setFilterResults(results?.courses);
-         } else {
-            setFilterResults([]);
-         }
-      }
-      filterResults();
-   }, [filters]);
+   const clearAll = () => {
+      setSelectedCategories([]);
+      setSelectedLevels([]);
+      setSearch("");
+   };
+
    return (
-      <div className="max-w-7xl mx-auto p-6">
-         {/* Main Search Bar with Filters */}
-         <div className="mb-8 space-y-4">
-            {/* Search Input */}
-            <div>
-               <div className="flex items-center gap-4">
-                  <div className="relative flex-1">
-                     <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-                     <input
-                        type="text"
-                        value={filters.search}
-                        onChange={(e) =>
-                           setFilters((prev) => ({ ...prev, search: e.target.value }))
-                        }
-                        placeholder="Search for courses..."
-                        className="w-full pl-12 pr-4 py-3 border rounded-xl bg-white focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none"
-                     />
-                  </div>
-
-                  {/* Mobile Filter Button */}
-                  <Dialog>
-                     <DialogTrigger className="md:hidden px-4 py-3 border rounded-xl hover:bg-gray-50">
-                        <SlidersHorizontal className="w-5 h-5" />
-                     </DialogTrigger>
-                     <DialogContent>
-                        <DialogHeader>
-                           <DialogTitle>Filters</DialogTitle>
-                        </DialogHeader>
-                        {/* Mobile Filter Content */}
-                        {/* ... Similar to desktop dropdowns but in a modal ... */}
-                     </DialogContent>
-                  </Dialog>
-               </div>
-               {/* <div className="p-[1rem] border rounded-[10px] mt-[.5rem]">
-                  <h1>Search Results</h1>
-                  <div>
-                     {filterResults.map((item) => (
-                        <div>
-                           <h1 className="font-bold">{item?.title}</h1>
-                           <p className="text-[.7rem] text-gray-500">{item.description}</p>
-                           <p>{item?.enrollments?.length} enrollmens</p>
-                        </div>
-                     ))}
-                  </div>
-               </div> */}
+      <div className="px-6 pt-6 space-y-4">
+         {/* Search row */}
+         <div className="flex gap-3">
+            <div className="relative flex-1">
+               <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-400" />
+               <input
+                  type="text"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  placeholder="Search for courses, instructors, topics…"
+                  className="w-full pl-10 pr-4 py-2.5 text-sm bg-white border border-zinc-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition placeholder:text-zinc-300"
+               />
+               {search && (
+                  <button
+                     onClick={() => setSearch("")}
+                     className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-300 hover:text-zinc-500"
+                  >
+                     <X className="w-4 h-4" />
+                  </button>
+               )}
             </div>
-
-            {/* Filter Buttons Row */}
-            <div className="hidden md:flex items-center gap-4">
-               {/* Category Filter */}
-               <DropdownMenu>
-                  <DropdownMenuTrigger className="px-4 py-2 border rounded-lg hover:bg-gray-50 flex items-center gap-2">
-                     <span>Category</span>
-                     <ChevronDown className="w-4 h-4" />
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent className="w-64 p-4">
-                     <div className="space-y-2">
-                        {["Web Development", "Design", "Business", "Marketing"].map((category) => (
-                           <label
-                              key={category}
-                              className="flex items-center space-x-2"
-                           >
-                              <input
-                                 type="checkbox"
-                                 checked={filters.categories.includes(category)}
-                                 onChange={() => toggleFilter("categories", category)}
-                                 className="rounded border-gray-300"
-                              />
-                              <span className="text-sm">{category}</span>
-                           </label>
-                        ))}
-                     </div>
-                  </DropdownMenuContent>
-               </DropdownMenu>
-
-               {/* Level Filter */}
-               <DropdownMenu>
-                  <DropdownMenuTrigger className="px-4 py-2 border rounded-lg hover:bg-gray-50 flex items-center gap-2">
-                     <span>Level</span>
-                     <ChevronDown className="w-4 h-4" />
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent className="w-48 p-4">
-                     <div className="space-y-2">
-                        {["Beginner", "Intermediate", "Advanced"].map((level) => (
-                           <label
-                              key={level}
-                              className="flex items-center space-x-2"
-                           >
-                              <input
-                                 type="checkbox"
-                                 checked={filters.levels.includes(level)}
-                                 onChange={() => toggleFilter("levels", level)}
-                                 className="rounded border-gray-300"
-                              />
-                              <span className="text-sm">{level}</span>
-                           </label>
-                        ))}
-                     </div>
-                  </DropdownMenuContent>
-               </DropdownMenu>
-
-               {/* Price Range Filter */}
-               <DropdownMenu>
-                  <DropdownMenuTrigger className="px-4 py-2 border rounded-lg hover:bg-gray-50 flex items-center gap-2">
-                     <span>Price</span>
-                     <ChevronDown className="w-4 h-4" />
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent className="w-64 p-4">
-                     <Slider
-                        value={filters.priceRange}
-                        onValueChange={(value) =>
-                           setFilters((prev) => ({ ...prev, priceRange: value }))
-                        }
-                        max={100}
-                        step={1}
-                        className="w-full"
-                     />
-                     <div className="flex justify-between mt-2 text-sm text-gray-600">
-                        <span>${filters.priceRange[0]}</span>
-                        <span>${filters.priceRange[1]}</span>
-                     </div>
-                  </DropdownMenuContent>
-               </DropdownMenu>
-
-               {/* Duration Filter */}
-               <DropdownMenu>
-                  <DropdownMenuTrigger className="px-4 py-2 border rounded-lg hover:bg-gray-50 flex items-center gap-2">
-                     <span>Duration</span>
-                     <ChevronDown className="w-4 h-4" />
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent className="w-48 p-4">
-                     <div className="space-y-2">
-                        {["0-2 hours", "3-6 hours", "6-12 hours", "12+ hours"].map((duration) => (
-                           <label
-                              key={duration}
-                              className="flex items-center space-x-2"
-                           >
-                              <input
-                                 type="checkbox"
-                                 checked={filters.duration.includes(duration)}
-                                 onChange={() => toggleFilter("duration", duration)}
-                                 className="rounded border-gray-300"
-                              />
-                              <span className="text-sm">{duration}</span>
-                           </label>
-                        ))}
-                     </div>
-                  </DropdownMenuContent>
-               </DropdownMenu>
-
-               {/* Sort Dropdown */}
-               <DropdownMenu>
-                  <DropdownMenuTrigger className="px-4 py-2 border rounded-lg hover:bg-gray-50 flex items-center gap-2">
-                     <span>Sort by</span>
-                     <ChevronDown className="w-4 h-4" />
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent>
-                     <DropdownMenuItem
-                        onClick={() => setFilters((prev) => ({ ...prev, sort: "popular" }))}
-                     >
-                        Most Popular
-                     </DropdownMenuItem>
-                     <DropdownMenuItem
-                        onClick={() => setFilters((prev) => ({ ...prev, sort: "rated" }))}
-                     >
-                        Highest Rated
-                     </DropdownMenuItem>
-                     <DropdownMenuItem
-                        onClick={() => setFilters((prev) => ({ ...prev, sort: "newest" }))}
-                     >
-                        Newest
-                     </DropdownMenuItem>
-                     <DropdownMenuItem
-                        onClick={() => setFilters((prev) => ({ ...prev, sort: "price-asc" }))}
-                     >
-                        Price: Low to High
-                     </DropdownMenuItem>
-                     <DropdownMenuItem
-                        onClick={() => setFilters((prev) => ({ ...prev, sort: "price-desc" }))}
-                     >
-                        Price: High to Low
-                     </DropdownMenuItem>
-                  </DropdownMenuContent>
-               </DropdownMenu>
-            </div>
-
-            {/* Active Filters */}
-            <div className="flex flex-wrap gap-2">
-               {Object.entries(filters).map(([key, value]) => {
-                  if (Array.isArray(value) && value.length > 0) {
-                     return value.map((item) => (
-                        <div
-                           key={`${key}-${item}`}
-                           className="flex items-center gap-1 px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-sm"
-                        >
-                           <span>{item}</span>
-                           <button
-                              onClick={() => toggleFilter(key, item)}
-                              className="hover:text-blue-900"
-                           >
-                              <X className="w-4 h-4" />
-                           </button>
-                        </div>
-                     ));
-                  }
-                  return null;
-               })}
-               {filters.priceRange[0] !== 0 || filters.priceRange[1] !== 100 ? (
-                  <div className="flex items-center gap-1 px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-sm">
-                     <span>
-                        ${filters.priceRange[0]} - ${filters.priceRange[1]}
-                     </span>
-                     <button
-                        onClick={() => setFilters((prev) => ({ ...prev, priceRange: [0, 100] }))}
-                        className="hover:text-blue-900"
-                     >
-                        <X className="w-4 h-4" />
-                     </button>
-                  </div>
-               ) : null}
-            </div>
+            <button
+               onClick={() => setShowFilters(!showFilters)}
+               className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border text-sm font-medium transition-all ${
+                  showFilters || hasActiveFilters
+                     ? "bg-zinc-900 text-white border-zinc-900"
+                     : "bg-white text-zinc-600 border-zinc-200 hover:border-zinc-300"
+               }`}
+            >
+               <SlidersHorizontal className="w-4 h-4" />
+               Filters
+               {hasActiveFilters && (
+                  <span className="bg-blue-500 text-white text-[10px] font-bold w-4 h-4 rounded-full flex items-center justify-center">
+                     {selectedCategories.length + selectedLevels.length}
+                  </span>
+               )}
+            </button>
          </div>
+
+         {/* Filter panel */}
+         {showFilters && (
+            <div className="bg-white border border-zinc-100 rounded-2xl p-5 space-y-5">
+               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                  <div>
+                     <p className="text-xs font-semibold text-zinc-500 uppercase tracking-wide mb-3">Category</p>
+                     <div className="flex flex-wrap gap-2">
+                        {CATEGORIES.map((cat) => (
+                           <button
+                              key={cat}
+                              onClick={() => toggleItem(selectedCategories, cat, setSelectedCategories)}
+                              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                                 selectedCategories.includes(cat)
+                                    ? "bg-blue-600 text-white"
+                                    : "bg-zinc-100 text-zinc-600 hover:bg-zinc-200"
+                              }`}
+                           >
+                              {cat}
+                           </button>
+                        ))}
+                     </div>
+                  </div>
+                  <div>
+                     <p className="text-xs font-semibold text-zinc-500 uppercase tracking-wide mb-3">Level</p>
+                     <div className="flex flex-wrap gap-2">
+                        {LEVELS.map((lvl) => (
+                           <button
+                              key={lvl}
+                              onClick={() => toggleItem(selectedLevels, lvl, setSelectedLevels)}
+                              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                                 selectedLevels.includes(lvl)
+                                    ? "bg-blue-600 text-white"
+                                    : "bg-zinc-100 text-zinc-600 hover:bg-zinc-200"
+                              }`}
+                           >
+                              {lvl}
+                           </button>
+                        ))}
+                     </div>
+                  </div>
+               </div>
+               {hasActiveFilters && (
+                  <button onClick={clearAll} className="text-xs text-red-500 hover:text-red-600 font-medium">
+                     Clear all filters
+                  </button>
+               )}
+            </div>
+         )}
       </div>
    );
 }
