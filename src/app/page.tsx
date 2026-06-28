@@ -1,225 +1,231 @@
-
-import {
-   ArrowRight,
-   BookOpen,
-   Users,
-   Award,
-   MessageSquare,
-   Play,
-   ChevronRight,
-} from "lucide-react";
+import { ArrowRight, BookOpen, Users, Zap, CheckCircle2 } from "lucide-react";
 import Link from "next/link";
 import FeaturedCourses from "@/components/SharedUi/Courses";
-// In a server component
-async function ProfilePage() {
+
+async function HomePage() {
    return (
       <>
-         <title>Cousite</title>
-         <div className="min-h-screen">
-            {/* Hero Section */}
-            <section className="bg-gradient-to-r from-blue-600 via-indigo-600 to-indigo-700 text-white min-h-[85vh] flex items-center justify-center relative overflow-hidden">
-               {/* Background decorative elements */}
-               <div className="absolute inset-0">
-                  <div className="absolute top-0 left-0 w-72 h-72 bg-white/5 rounded-full -translate-x-1/2 -translate-y-1/2 blur-3xl"></div>
-                  <div className="absolute bottom-0 right-0 w-96 h-96 bg-blue-500/10 rounded-full translate-x-1/3 translate-y-1/3 blur-3xl"></div>
-               </div>
+         <title>Coursite — Share Knowledge, Transform Lives</title>
+         <div className="min-h-screen bg-white">
 
-               <div className="max-w-[1100px] mx-auto px-6 py-24 relative z-10">
-                  <div className="flex flex-col items-center text-center space-y-8">
-                     {/* Eyebrow text */}
-                     <span className="px-4 py-1.5 bg-white/10 text-sm font-medium rounded-full">
-                        Launching Something Special 🚀
+            {/* Hero */}
+            <section className="bg-zinc-950 text-white relative overflow-hidden">
+               <div
+                  className="absolute inset-0 opacity-[0.03]"
+                  style={{
+                     backgroundImage: `radial-gradient(circle at 1px 1px, white 1px, transparent 0)`,
+                     backgroundSize: "40px 40px",
+                  }}
+               />
+               <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-zinc-950/50" />
+
+               <div className="relative max-w-[1100px] mx-auto px-6 pt-24 pb-32">
+                  <div className="max-w-3xl">
+                     <span className="inline-flex items-center gap-2 text-xs font-medium text-zinc-400 uppercase tracking-widest mb-8 border border-zinc-800 rounded-full px-4 py-1.5">
+                        Free courses · Global community
                      </span>
-
-                     {/* Main heading with gradient */}
-                     <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 bg-clip-text">
-                        Share Your Knowledge,
-                        <br />
-                        <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-200 to-white">
-                           Transform Lives
-                        </span>
+                     <h1 className="text-5xl md:text-7xl font-bold tracking-tight leading-[1.05] mb-6">
+                        Where knowledge becomes your{" "}
+                        <span className="text-blue-400">edge.</span>
                      </h1>
-
-                     {/* Subheading */}
-                     <p className="text-lg md:text-xl text-blue-100 max-w-2xl">
-                        Create and share courses effortlessly. Connect with learners worldwide and
-                        make an impact.
+                     <p className="text-lg text-zinc-400 max-w-xl leading-relaxed mb-10">
+                        Create and share courses with thousands of learners worldwide — no paywalls,
+                        no gatekeeping. Just learning.
                      </p>
-
-                     {/* CTA Buttons */}
-                     <div className="flex flex-col sm:flex-row gap-4 mt-8">
+                     <div className="flex flex-col sm:flex-row gap-3">
                         <Link
                            href="/dashboard"
-                           className="bg-white text-blue-600 px-8 py-4 rounded-lg font-semibold flex items-center justify-center gap-2 hover:bg-blue-50 transition-all shadow-lg shadow-blue-500/25"
+                           className="inline-flex items-center justify-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-500 transition-colors text-sm"
                         >
-                           Start Teaching <ArrowRight className="w-5 h-5" />
+                           Start teaching free <ArrowRight className="w-4 h-4" />
                         </Link>
-                        <button className="border-2 border-white/30 px-8 py-4 rounded-lg font-semibold flex items-center justify-center gap-2 hover:bg-white/10 transition-all backdrop-blur-sm">
-                           Browse Courses <ChevronRight className="w-5 h-5" />
-                        </button>
-                     </div>
-
-                     {/* Featured Image */}
-                     <div className="mt-16 md:mt-24 w-full max-w-4xl mx-auto">
-                        <img
-                           src="/sh.jpeg"
-                           alt="Learning Platform"
-                           className="rounded-xl shadow-2xl shadow-blue-500/20 border border-white/10 w-full"
-                        />
-                     </div>
-                  </div>
-               </div>
-            </section>
-
-            {/* Features Section */}
-            <section className="py-20 bg-gray-50">
-               <div className="max-w-[1100px] mx-auto px-6">
-                  <h2 className="text-3xl font-bold text-center mb-16">Why Choose Our Platform</h2>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                     <div className="bg-white p-8 rounded-xl shadow-sm">
-                        <BookOpen className="w-12 h-12 text-blue-600 mb-4" />
-                        <h3 className="text-xl font-semibold mb-4">Rich Course Creation Tools</h3>
-                        <p className="text-gray-600">
-                           Build engaging courses with our intuitive tools. Add videos, quizzes, and
-                           more.
-                        </p>
-                     </div>
-                     <div className="bg-white p-8 rounded-xl shadow-sm">
-                        <Users className="w-12 h-12 text-blue-600 mb-4" />
-                        <h3 className="text-xl font-semibold mb-4">Growing Community</h3>
-                        <p className="text-gray-600">
-                           Join thousands of instructors and learners. Share knowledge and grow
-                           together.
-                        </p>
-                     </div>
-                     <div className="bg-white p-8 rounded-xl shadow-sm">
-                        <Award className="w-12 h-12 text-blue-600 mb-4" />
-                        <h3 className="text-xl font-semibold mb-4">Free Access</h3>
-                        <p className="text-gray-600">
-                           All courses are free. Focus on learning without any financial barriers.
-                        </p>
-                     </div>
-                  </div>
-               </div>
-            </section>
-
-            {/* How It Works Section */}
-            <section className="py-20">
-               <div className="max-w-[1100px] mx-auto px-6">
-                  <h2 className="text-3xl font-bold text-center mb-16">How It Works</h2>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-                     <div>
-                        <div className="mb-8">
-                           <div className="flex items-center gap-4 mb-4">
-                              <div className="bg-blue-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">
-                                 1
-                              </div>
-                              <h3 className="text-xl font-semibold">Create Your Course</h3>
-                           </div>
-                           <p className="text-gray-600 ml-12">
-                              Design your curriculum and upload content using our easy-to-use tools.
-                           </p>
-                        </div>
-                        <div className="mb-8">
-                           <div className="flex items-center gap-4 mb-4">
-                              <div className="bg-blue-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">
-                                 2
-                              </div>
-                              <h3 className="text-xl font-semibold">Share Your Knowledge</h3>
-                           </div>
-                           <p className="text-gray-600 ml-12">
-                              Publish your course and reach students worldwide.
-                           </p>
-                        </div>
-                        <div>
-                           <div className="flex items-center gap-4 mb-4">
-                              <div className="bg-blue-600 text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">
-                                 3
-                              </div>
-                              <h3 className="text-xl font-semibold">Engage with Students</h3>
-                           </div>
-                           <p className="text-gray-600 ml-12">
-                              Interact with learners through discussions and feedback.
-                           </p>
-                        </div>
-                     </div>
-                     <div>
-                        <img
-                           src="/creat.png"
-                           alt="How It Works"
-                           className="rounded-lg shadow-xl"
-                        />
-                     </div>
-                  </div>
-               </div>
-            </section>
-
-            {/* Stats Section */}
-            <section className="bg-blue-600 text-white py-20">
-               <div className="max-w-[1100px] mx-auto px-6">
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-                     <div>
-                        <div className="text-4xl font-bold mb-2">10K+</div>
-                        <div className="text-blue-100">Active Students</div>
-                     </div>
-                     <div>
-                        <div className="text-4xl font-bold mb-2">500+</div>
-                        <div className="text-blue-100">Free Courses</div>
-                     </div>
-                     <div>
-                        <div className="text-4xl font-bold mb-2">200+</div>
-                        <div className="text-blue-100">Expert Instructors</div>
-                     </div>
-                  </div>
-               </div>
-            </section>
-
-            {/* Featured Courses Section */}
-
-            <FeaturedCourses />
-
-            {/* Testimonials Section */}
-            <section className="bg-gray-50 py-20">
-               <div className="max-w-[1100px] mx-auto px-6">
-                  <h2 className="text-3xl font-bold text-center mb-16">What Our Users Say</h2>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                     {[1, 2].map((item) => (
-                        <div
-                           key={item}
-                           className="bg-white p-8 rounded-xl shadow-sm"
+                        <Link
+                           href="#courses"
+                           className="inline-flex items-center justify-center gap-2 border border-zinc-700 text-zinc-300 px-6 py-3 rounded-lg font-medium hover:bg-zinc-800 transition-colors text-sm"
                         >
-                           <div className="flex items-center gap-4 mb-6">
-                              <img
-                                 src={`https://png.pngtree.com/png-clipart/20210915/ourlarge/pngtree-avatar-placeholder-abstract-white-blue-green-png-image_3918476.jpg`}
-                                 alt="User"
-                                 className="w-16 h-16 rounded-full"
-                              />
-                              <div>
-                                 <div className="font-semibold">John Doe</div>
-                                 <div className="text-gray-500">Web Developer</div>
-                              </div>
+                           Explore courses
+                        </Link>
+                     </div>
+                  </div>
+
+                  <div className="mt-20 rounded-2xl overflow-hidden border border-zinc-800 shadow-2xl shadow-black/50">
+                     <img src="/sh.jpeg" alt="Coursite platform" className="w-full object-cover" />
+                  </div>
+               </div>
+            </section>
+
+            {/* Social proof strip */}
+            <section className="border-b border-zinc-100 bg-zinc-50">
+               <div className="max-w-[1100px] mx-auto px-6 py-5 flex flex-col sm:flex-row items-center justify-center gap-8">
+                  {[
+                     { value: "10K+", label: "Active learners" },
+                     { value: "500+", label: "Free courses" },
+                     { value: "200+", label: "Expert instructors" },
+                     { value: "50+", label: "Countries" },
+                  ].map((s) => (
+                     <div key={s.label} className="flex items-center gap-3">
+                        <span className="text-2xl font-bold text-zinc-900">{s.value}</span>
+                        <span className="text-sm text-zinc-500">{s.label}</span>
+                     </div>
+                  ))}
+               </div>
+            </section>
+
+            {/* Why Coursite */}
+            <section className="py-24 bg-white">
+               <div className="max-w-[1100px] mx-auto px-6">
+                  <div className="mb-14">
+                     <p className="text-xs font-semibold text-blue-600 uppercase tracking-widest mb-3">Why Coursite</p>
+                     <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-zinc-900 max-w-lg">
+                        Built for people who take learning seriously.
+                     </h2>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-zinc-100 border border-zinc-100 rounded-2xl overflow-hidden">
+                     {[
+                        {
+                           icon: <BookOpen className="w-5 h-5" />,
+                           title: "Rich course tools",
+                           desc: "Build engaging courses with video, quizzes, and structured lessons using an intuitive creator.",
+                        },
+                        {
+                           icon: <Users className="w-5 h-5" />,
+                           title: "Thriving community",
+                           desc: "Connect with thousands of instructors and learners. Collaborate, discuss, and grow together.",
+                        },
+                        {
+                           icon: <Zap className="w-5 h-5" />,
+                           title: "Always free",
+                           desc: "All courses are free to access. Zero financial barriers between you and your next skill.",
+                        },
+                     ].map((f) => (
+                        <div key={f.title} className="bg-white p-8 hover:bg-zinc-50 transition-colors">
+                           <div className="w-9 h-9 bg-blue-50 rounded-lg flex items-center justify-center text-blue-600 mb-5">
+                              {f.icon}
                            </div>
-                           <p className="text-gray-600">
-                              "The platform has been incredible for both teaching and learning. The
-                              tools are intuitive, and the community is super supportive."
-                           </p>
+                           <h3 className="font-semibold text-zinc-900 mb-2">{f.title}</h3>
+                           <p className="text-sm text-zinc-500 leading-relaxed">{f.desc}</p>
                         </div>
                      ))}
                   </div>
                </div>
             </section>
 
-            {/* CTA Section */}
-            <section className="py-20">
+            {/* How it works */}
+            <section className="py-24 bg-zinc-50">
+               <div className="max-w-[1100px] mx-auto px-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+                     <div>
+                        <p className="text-xs font-semibold text-blue-600 uppercase tracking-widest mb-3">How it works</p>
+                        <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-zinc-900 mb-10">
+                           From idea to course in three steps.
+                        </h2>
+                        <div className="space-y-8">
+                           {[
+                              {
+                                 n: "01",
+                                 title: "Create your course",
+                                 desc: "Design your curriculum and upload content using our easy-to-use course builder.",
+                              },
+                              {
+                                 n: "02",
+                                 title: "Publish and share",
+                                 desc: "Go live instantly. Your course is discoverable by learners from day one.",
+                              },
+                              {
+                                 n: "03",
+                                 title: "Engage and grow",
+                                 desc: "Interact with students through discussions, feedback, and live Q&A sessions.",
+                              },
+                           ].map((step) => (
+                              <div key={step.n} className="flex gap-6">
+                                 <span className="text-xs font-bold text-zinc-300 pt-1 w-6 shrink-0">{step.n}</span>
+                                 <div>
+                                    <h3 className="font-semibold text-zinc-900 mb-1">{step.title}</h3>
+                                    <p className="text-sm text-zinc-500 leading-relaxed">{step.desc}</p>
+                                 </div>
+                              </div>
+                           ))}
+                        </div>
+                     </div>
+                     <div className="rounded-2xl overflow-hidden border border-zinc-200 shadow-lg">
+                        <img src="/creat.png" alt="Course creation" className="w-full object-cover" />
+                     </div>
+                  </div>
+               </div>
+            </section>
+
+            {/* Featured Courses */}
+            <div id="courses">
+               <FeaturedCourses />
+            </div>
+
+            {/* Testimonials */}
+            <section className="py-24 bg-zinc-50">
+               <div className="max-w-[1100px] mx-auto px-6">
+                  <div className="mb-14">
+                     <p className="text-xs font-semibold text-blue-600 uppercase tracking-widest mb-3">Testimonials</p>
+                     <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-zinc-900">
+                        What our community says.
+                     </h2>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                     {[
+                        {
+                           quote: "The platform completely changed how I think about online education. The tools are intuitive and the community is genuinely supportive.",
+                           name: "Alex Rivera",
+                           role: "Full-Stack Developer",
+                        },
+                        {
+                           quote: "I published my first course in a weekend. The experience was smooth and the student engagement has been incredible since day one.",
+                           name: "Priya Sharma",
+                           role: "UX Designer & Instructor",
+                        },
+                     ].map((t) => (
+                        <div
+                           key={t.name}
+                           className="bg-white border border-zinc-100 rounded-2xl p-8"
+                        >
+                           <p className="text-zinc-700 leading-relaxed mb-6 text-[15px]">
+                              &ldquo;{t.quote}&rdquo;
+                           </p>
+                           <div className="flex items-center gap-3">
+                              <div className="w-9 h-9 rounded-full bg-zinc-200 flex items-center justify-center text-xs font-bold text-zinc-600">
+                                 {t.name[0]}
+                              </div>
+                              <div>
+                                 <p className="text-sm font-semibold text-zinc-900">{t.name}</p>
+                                 <p className="text-xs text-zinc-400">{t.role}</p>
+                              </div>
+                           </div>
+                        </div>
+                     ))}
+                  </div>
+               </div>
+            </section>
+
+            {/* CTA */}
+            <section className="bg-zinc-950 text-white py-24">
                <div className="max-w-[1100px] mx-auto px-6 text-center">
-                  <h2 className="text-3xl font-bold mb-6">Ready to Start Your Learning Journey?</h2>
-                  <p className="text-gray-600 mb-8 max-w-2xl mx-auto">
-                     Join our community of learners and instructors. Create or enroll in courses for
-                     free today.
+                  <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">
+                     Ready to start learning?
+                  </h2>
+                  <p className="text-zinc-400 mb-8 max-w-md mx-auto text-[15px]">
+                     Join thousands of learners and instructors. Free access, forever.
                   </p>
-                  <button className="bg-blue-600 text-white px-8 py-4 rounded-lg font-semibold flex items-center gap-2 mx-auto hover:bg-blue-700">
-                     Get Started Now <ArrowRight className="w-5 h-5" />
-                  </button>
+                  <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                     <Link
+                        href="/register"
+                        className="inline-flex items-center justify-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-500 transition-colors text-sm"
+                     >
+                        Create free account <ArrowRight className="w-4 h-4" />
+                     </Link>
+                     <Link
+                        href="/about"
+                        className="inline-flex items-center justify-center border border-zinc-700 text-zinc-300 px-6 py-3 rounded-lg font-medium hover:bg-zinc-800 transition-colors text-sm"
+                     >
+                        Learn more about us
+                     </Link>
+                  </div>
                </div>
             </section>
          </div>
@@ -227,4 +233,4 @@ async function ProfilePage() {
    );
 }
 
-export default ProfilePage;
+export default HomePage;

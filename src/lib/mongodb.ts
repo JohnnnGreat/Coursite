@@ -1,9 +1,10 @@
 import mongoose from "mongoose";
+import dns from "dns";
+dns.setServers(["8.8.8.8", "8.8.4.4"]);
 
-// MongoDB connection URI
 const MONGO_URI: string =
    process.env.MONGO_URI ||
-   "mongodb+srv://johnossai20:wJH8hmNOuFDJAUGX@cluster0.becdu.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+   "mongodb+srv://JohnGreat:John-2001@cluster0.yfacnts.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 
 /**
  * Connect to MongoDB with caching to reuse the connection if it already exists

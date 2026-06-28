@@ -1,119 +1,141 @@
 import React from "react";
-import { Mail, Phone, MapPin, MessageCircle } from "lucide-react";
+import { Mail, Phone, MessageCircle, MapPin } from "lucide-react";
 
 const ContactPage = () => {
    const contactMethods = [
       {
-         icon: <Phone className="w-6 h-6" />,
-         title: "Phone Support",
-         description: "Monday to Friday, 9am to 6pm",
-         contact: "+1 (555) 123-4567",
+         icon: <Phone className="w-5 h-5" />,
+         title: "Phone",
+         detail: "+1 (555) 123-4567",
+         sub: "Mon – Fri, 9am – 6pm",
       },
       {
-         icon: <Mail className="w-6 h-6" />,
+         icon: <Mail className="w-5 h-5" />,
          title: "Email",
-         description: "We'll respond within 24 hours",
-         contact: "support@example.com",
+         detail: "support@coursite.io",
+         sub: "Response within 24 hours",
       },
       {
-         icon: <MessageCircle className="w-6 h-6" />,
-         title: "Live Chat",
-         description: "Available 24/7",
-         contact: "Start a conversation",
+         icon: <MessageCircle className="w-5 h-5" />,
+         title: "Live chat",
+         detail: "Start a conversation",
+         sub: "Available 24/7",
       },
       {
-         icon: <MapPin className="w-6 h-6" />,
+         icon: <MapPin className="w-5 h-5" />,
          title: "Office",
-         description: "Visit us in person",
-         contact: "123 Learning Street, Suite 100",
+         detail: "123 Learning Street",
+         sub: "Suite 100, San Francisco",
       },
    ];
 
    return (
       <div className="min-h-screen bg-white">
-         {/* Hero Section */}
-         <div className="bg-gradient-to-r from-purple-600 to-purple-800 text-white">
-            <div className="container mx-auto px-4 py-16">
-               <div className="max-w-3xl mx-auto text-center">
-                  <h1 className="text-4xl font-bold mb-6">Contact Us</h1>
-                  <p className="text-xl mb-8">We're here to help with any questions you may have</p>
+
+         {/* Hero */}
+         <section className="bg-zinc-950 text-white">
+            <div className="max-w-[1100px] mx-auto px-6 pt-20 pb-24">
+               <p className="text-xs font-semibold text-blue-400 uppercase tracking-widest mb-4">Contact</p>
+               <h1 className="text-5xl md:text-6xl font-bold tracking-tight leading-tight max-w-xl mb-6">
+                  We're here to help.
+               </h1>
+               <p className="text-zinc-400 text-lg max-w-xl leading-relaxed">
+                  Whether you have a question, feedback, or just want to say hello — we read every message
+                  and respond quickly.
+               </p>
+            </div>
+         </section>
+
+         {/* Contact methods */}
+         <section className="py-16 bg-zinc-50 border-b border-zinc-100">
+            <div className="max-w-[1100px] mx-auto px-6">
+               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                  {contactMethods.map((m) => (
+                     <div
+                        key={m.title}
+                        className="bg-white border border-zinc-100 rounded-2xl p-6 hover:border-zinc-200 hover:shadow-sm transition-all"
+                     >
+                        <div className="w-9 h-9 bg-blue-50 rounded-lg flex items-center justify-center text-blue-600 mb-4">
+                           {m.icon}
+                        </div>
+                        <p className="text-xs font-semibold text-zinc-400 uppercase tracking-wide mb-1">{m.title}</p>
+                        <p className="font-semibold text-zinc-900 text-sm">{m.detail}</p>
+                        <p className="text-xs text-zinc-400 mt-0.5">{m.sub}</p>
+                     </div>
+                  ))}
                </div>
             </div>
-         </div>
+         </section>
 
-         {/* Contact Methods */}
-         <div className="container mx-auto px-4 py-16">
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
-               {contactMethods.map((method, index) => (
-                  <div
-                     key={index}
-                     className="p-6 text-center rounded-lg border border-gray-200 hover:shadow-lg transition-shadow"
-                  >
-                     <div className="text-purple-600 mx-auto mb-4">{method.icon}</div>
-                     <h3 className="text-xl font-semibold mb-2">{method.title}</h3>
-                     <p className="text-gray-600 mb-2">{method.description}</p>
-                     <p className="font-medium text-purple-600">{method.contact}</p>
+         {/* Form */}
+         <section className="py-24 bg-white">
+            <div className="max-w-[1100px] mx-auto px-6">
+               <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-start">
+                  <div>
+                     <p className="text-xs font-semibold text-blue-600 uppercase tracking-widest mb-3">Send a message</p>
+                     <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-zinc-900 mb-4">
+                        Tell us what's on your mind.
+                     </h2>
+                     <p className="text-zinc-500 text-[15px] leading-relaxed">
+                        We respond to every inquiry within one business day. For urgent technical issues,
+                        use live chat — it's the fastest way to get help.
+                     </p>
                   </div>
-               ))}
-            </div>
 
-            {/* Contact Form */}
-            <div className="max-w-2xl mx-auto">
-               <form className="space-y-6">
-                  <div className="grid md:grid-cols-2 gap-6">
+                  <form className="space-y-5">
+                     <div className="grid grid-cols-2 gap-4">
+                        <div>
+                           <label className="block text-xs font-medium text-zinc-600 mb-1.5">First name</label>
+                           <input
+                              type="text"
+                              className="w-full px-4 py-3 rounded-xl border border-zinc-200 text-zinc-900 text-sm placeholder:text-zinc-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                              placeholder="Alex"
+                           />
+                        </div>
+                        <div>
+                           <label className="block text-xs font-medium text-zinc-600 mb-1.5">Last name</label>
+                           <input
+                              type="text"
+                              className="w-full px-4 py-3 rounded-xl border border-zinc-200 text-zinc-900 text-sm placeholder:text-zinc-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                              placeholder="Rivera"
+                           />
+                        </div>
+                     </div>
                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                           First Name
-                        </label>
+                        <label className="block text-xs font-medium text-zinc-600 mb-1.5">Email address</label>
                         <input
-                           type="text"
-                           className="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                           type="email"
+                           className="w-full px-4 py-3 rounded-xl border border-zinc-200 text-zinc-900 text-sm placeholder:text-zinc-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition"
+                           placeholder="alex@example.com"
                         />
                      </div>
                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">
-                           Last Name
-                        </label>
-                        <input
-                           type="text"
-                           className="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        <label className="block text-xs font-medium text-zinc-600 mb-1.5">Subject</label>
+                        <select className="w-full px-4 py-3 rounded-xl border border-zinc-200 text-zinc-900 text-sm bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition appearance-none">
+                           <option>General inquiry</option>
+                           <option>Technical support</option>
+                           <option>Course content</option>
+                           <option>Instructor application</option>
+                        </select>
+                     </div>
+                     <div>
+                        <label className="block text-xs font-medium text-zinc-600 mb-1.5">Message</label>
+                        <textarea
+                           rows={5}
+                           className="w-full px-4 py-3 rounded-xl border border-zinc-200 text-zinc-900 text-sm placeholder:text-zinc-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition resize-none"
+                           placeholder="What can we help you with?"
                         />
                      </div>
-                  </div>
-                  <div>
-                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Email Address
-                     </label>
-                     <input
-                        type="email"
-                        className="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                     />
-                  </div>
-                  <div>
-                     <label className="block text-sm font-medium text-gray-700 mb-2">Subject</label>
-                     <select className="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500">
-                        <option>General Inquiry</option>
-                        <option>Technical Support</option>
-                        <option>Billing Question</option>
-                        <option>Course Content</option>
-                     </select>
-                  </div>
-                  <div>
-                     <label className="block text-sm font-medium text-gray-700 mb-2">Message</label>
-                     <textarea
-                        rows={6}
-                        className="w-full p-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                     ></textarea>
-                  </div>
-                  <button
-                     type="submit"
-                     className="w-full bg-purple-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-purple-700 transition-colors"
-                  >
-                     Send Message
-                  </button>
-               </form>
+                     <button
+                        type="submit"
+                        className="w-full bg-blue-600 text-white py-3 rounded-xl text-sm font-medium hover:bg-blue-500 transition-colors"
+                     >
+                        Send message
+                     </button>
+                  </form>
+               </div>
             </div>
-         </div>
+         </section>
       </div>
    );
 };

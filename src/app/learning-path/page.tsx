@@ -1,134 +1,183 @@
 import React from "react";
-import { BookOpen, Code, Briefcase, ChevronRight } from "lucide-react";
+import Link from "next/link";
+import { ArrowRight, Code, BookOpen } from "lucide-react";
 
 const LearningPathPage = () => {
    const paths = [
       {
          title: "Web Development",
-         description: "Master modern web development from basics to advanced concepts",
+         description: "Master modern web development from the fundamentals to full-stack production apps.",
+         icon: <Code className="w-5 h-5" />,
+         duration: "12 months",
          levels: [
             {
                level: "Beginner",
-               courses: ["HTML & CSS Fundamentals", "JavaScript Basics", "Responsive Design"],
                duration: "3 months",
+               courses: ["HTML & CSS Fundamentals", "JavaScript Basics", "Responsive Design"],
             },
             {
                level: "Intermediate",
-               courses: ["React Fundamentals", "Node.js Basics", "Database Design"],
                duration: "4 months",
+               courses: ["React Fundamentals", "Node.js Basics", "Database Design"],
             },
             {
                level: "Advanced",
-               courses: ["Full Stack Development", "Cloud Deployment", "Performance Optimization"],
                duration: "5 months",
+               courses: ["Full Stack Development", "Cloud Deployment", "Performance Optimization"],
             },
          ],
-         icon: <Code className="w-6 h-6" />,
       },
       {
          title: "Data Science",
-         description: "Learn to analyze and interpret complex data sets",
+         description: "Go from zero to analyzing complex datasets and building machine learning models.",
+         icon: <BookOpen className="w-5 h-5" />,
+         duration: "12 months",
          levels: [
             {
                level: "Beginner",
-               courses: ["Python Basics", "Statistics Fundamentals", "Data Visualization"],
                duration: "3 months",
+               courses: ["Python Basics", "Statistics Fundamentals", "Data Visualization"],
             },
             {
                level: "Intermediate",
-               courses: ["Machine Learning Basics", "SQL & Databases", "Data Analysis"],
                duration: "4 months",
+               courses: ["Machine Learning Basics", "SQL & Databases", "Data Analysis"],
             },
             {
                level: "Advanced",
-               courses: ["Deep Learning", "Big Data Processing", "Production Deployment"],
                duration: "5 months",
+               courses: ["Deep Learning", "Big Data Processing", "Production Deployment"],
             },
          ],
-         icon: <BookOpen className="w-6 h-6" />,
       },
    ];
 
+   const levelColors: Record<string, string> = {
+      Beginner: "text-emerald-600 bg-emerald-50 border-emerald-100",
+      Intermediate: "text-blue-600 bg-blue-50 border-blue-100",
+      Advanced: "text-violet-600 bg-violet-50 border-violet-100",
+   };
+
    return (
       <div className="min-h-screen bg-white">
-         {/* Hero Section */}
-         <div className="bg-gradient-to-r from-indigo-600 to-indigo-800 text-white">
-            <div className="max-w-[1100px] mx-auto px-4 py-16">
-               <div className="max-w-3xl mx-auto text-center">
-                  <h1 className="text-4xl font-bold mb-6">Learning Paths</h1>
-                  <p className="text-xl mb-8">
-                     Structured curricula to help you achieve your career goals
-                  </p>
-               </div>
-            </div>
-         </div>
 
-         {/* Paths Section */}
-         <div className="max-w-[1100px] mx-auto px-4 py-16">
-            <div className="space-y-12">
-               {paths.map((path, pathIndex) => (
-                  <div
-                     key={pathIndex}
-                     className="border rounded-lg overflow-hidden"
-                  >
-                     <div className="bg-gray-50 p-6 border-b">
-                        <div className="flex items-center gap-4">
-                           <div className="text-indigo-600">{path.icon}</div>
-                           <div>
-                              <h2 className="text-2xl font-bold mb-2">{path.title}</h2>
-                              <p className="text-gray-600">{path.description}</p>
+         {/* Hero */}
+         <section className="bg-zinc-950 text-white">
+            <div className="max-w-[1100px] mx-auto px-6 pt-20 pb-24">
+               <p className="text-xs font-semibold text-blue-400 uppercase tracking-widest mb-4">Learning paths</p>
+               <h1 className="text-5xl md:text-6xl font-bold tracking-tight leading-tight max-w-2xl mb-6">
+                  A structured road to<br />
+                  <span className="text-blue-400">your career goals.</span>
+               </h1>
+               <p className="text-zinc-400 text-lg max-w-xl leading-relaxed">
+                  No more wondering what to learn next. Our learning paths give you a clear, sequenced
+                  curriculum — from your first lesson to job-ready skills.
+               </p>
+            </div>
+         </section>
+
+         {/* Paths */}
+         <section className="py-24 bg-white">
+            <div className="max-w-[1100px] mx-auto px-6 space-y-12">
+               {paths.map((path, pi) => (
+                  <div key={pi} className="border border-zinc-100 rounded-2xl overflow-hidden">
+
+                     {/* Path header */}
+                     <div className="bg-zinc-50 border-b border-zinc-100 px-8 py-6 flex items-start gap-5">
+                        <div className="w-10 h-10 bg-blue-50 rounded-xl flex items-center justify-center text-blue-600 shrink-0 mt-0.5">
+                           {path.icon}
+                        </div>
+                        <div className="flex-1">
+                           <div className="flex items-center justify-between gap-4 flex-wrap">
+                              <h2 className="text-xl font-bold text-zinc-900">{path.title}</h2>
+                              <span className="text-xs text-zinc-400 font-medium">{path.duration} total</span>
                            </div>
+                           <p className="text-sm text-zinc-500 mt-1">{path.description}</p>
                         </div>
                      </div>
-                     <div className="p-6">
-                        <div className="space-y-8">
-                           {path.levels.map((level, levelIndex) => (
-                              <div
-                                 key={levelIndex}
-                                 className="relative pl-8"
-                              >
-                                 {levelIndex !== path.levels.length - 1 && (
-                                    <div className="absolute left-4 top-8 w-0.5 h-full bg-gray-200"></div>
-                                 )}
-                                 <div className="flex items-center gap-4 mb-4">
-                                    <div className="w-8 h-8 rounded-full bg-indigo-600 text-white flex items-center justify-center">
-                                       {levelIndex + 1}
-                                    </div>
-                                    <h3 className="text-xl font-semibold">{level.level}</h3>
-                                    <span className="text-gray-500 ml-auto">{level.duration}</span>
-                                 </div>
-                                 <div className="space-y-3">
-                                    {level.courses.map((course, courseIndex) => (
-                                       <div
-                                          key={courseIndex}
-                                          className="flex items-center gap-2 text-gray-600"
-                                       >
-                                          <ChevronRight className="w-4 h-4" />
-                                          <span>{course}</span>
-                                       </div>
-                                    ))}
-                                 </div>
+
+                     {/* Levels */}
+                     <div className="divide-y divide-zinc-100">
+                        {path.levels.map((level, li) => (
+                           <div key={li} className="px-8 py-7 hover:bg-zinc-50 transition-colors">
+                              <div className="flex items-center gap-3 mb-4">
+                                 <span
+                                    className={`text-xs font-semibold px-3 py-1 rounded-full border ${levelColors[level.level]}`}
+                                 >
+                                    {level.level}
+                                 </span>
+                                 <span className="text-xs text-zinc-400">{level.duration}</span>
                               </div>
-                           ))}
-                        </div>
+                              <div className="flex flex-wrap gap-2">
+                                 {level.courses.map((course, ci) => (
+                                    <span
+                                       key={ci}
+                                       className="text-sm text-zinc-600 bg-zinc-100 px-3 py-1.5 rounded-lg"
+                                    >
+                                       {course}
+                                    </span>
+                                 ))}
+                              </div>
+                           </div>
+                        ))}
                      </div>
                   </div>
                ))}
             </div>
-         </div>
+         </section>
 
-         {/* CTA Section */}
-         <div className="bg-gray-50 py-16">
-            <div className="container mx-auto px-4 text-center">
-               <h2 className="text-2xl font-bold mb-4">Ready to Start Your Learning Journey?</h2>
-               <p className="text-gray-600 mb-8">
-                  Choose a path and begin your transformation today
-               </p>
-               <button className="bg-indigo-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-indigo-700 transition-colors">
-                  Explore All Paths
-               </button>
+         {/* How paths work */}
+         <section className="py-24 bg-zinc-50">
+            <div className="max-w-[1100px] mx-auto px-6">
+               <div className="mb-12">
+                  <p className="text-xs font-semibold text-blue-600 uppercase tracking-widest mb-3">How it works</p>
+                  <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-zinc-900 max-w-md">
+                     Progress at your own pace.
+                  </h2>
+               </div>
+               <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-zinc-200 border border-zinc-200 rounded-2xl overflow-hidden">
+                  {[
+                     {
+                        n: "01",
+                        title: "Pick a path",
+                        desc: "Choose based on your goal — career switch, skill upgrade, or something new.",
+                     },
+                     {
+                        n: "02",
+                        title: "Start at your level",
+                        desc: "No need to start from scratch. Jump in at beginner, intermediate, or advanced.",
+                     },
+                     {
+                        n: "03",
+                        title: "Advance and certify",
+                        desc: "Complete each level to unlock the next. Earn a certificate when you finish.",
+                     },
+                  ].map((s) => (
+                     <div key={s.n} className="bg-white p-8">
+                        <p className="text-xs font-bold text-zinc-300 mb-4">{s.n}</p>
+                        <h3 className="font-semibold text-zinc-900 mb-2">{s.title}</h3>
+                        <p className="text-sm text-zinc-500 leading-relaxed">{s.desc}</p>
+                     </div>
+                  ))}
+               </div>
             </div>
-         </div>
+         </section>
+
+         {/* CTA */}
+         <section className="bg-zinc-950 text-white py-20">
+            <div className="max-w-[1100px] mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-8">
+               <div>
+                  <h2 className="text-3xl font-bold tracking-tight mb-2">Pick a path. Start today.</h2>
+                  <p className="text-zinc-400 text-[15px]">Free access, forever. No commitments required.</p>
+               </div>
+               <Link
+                  href="/register"
+                  className="shrink-0 inline-flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-500 transition-colors text-sm"
+               >
+                  Get started free <ArrowRight className="w-4 h-4" />
+               </Link>
+            </div>
+         </section>
       </div>
    );
 };

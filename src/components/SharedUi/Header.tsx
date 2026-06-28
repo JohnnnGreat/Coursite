@@ -1,168 +1,114 @@
 "use client";
 import React from "react";
-import { Menu, X, ChevronDown } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import Link from "next/link";
 import { getSession } from "next-auth/react";
 
 const Header = () => {
    const [isOpen, setIsOpen] = React.useState(false);
-
    const [user, setUser] = React.useState(null);
+   const [scrolled, setScrolled] = React.useState(false);
 
    React.useEffect(() => {
       async function getUser() {
          const session = await getSession();
-         if (session?.user) {
-            setUser(session?.user);
-         }
+         if (session?.user) setUser(session?.user);
       }
-
       getUser();
+
+      const handleScroll = () => setScrolled(window.scrollY > 8);
+      window.addEventListener("scroll", handleScroll);
+      return () => window.removeEventListener("scroll", handleScroll);
    }, []);
+
    return (
-      <header className="bg-white border-b border-gray-100  w-full top-0 z-50">
-         <nav className="max-w-[1100px] mx-auto px-6 py-4">
-            <div className="flex justify-between items-center">
-               {/* Logo */}
-               <div className="flex items-center">
-                  <a
-                     href="/"
-                     className="text-2xl font-bold text-blue-600"
-                  >
-                     Coursite.
-                  </a>
-               </div>
+      <header
+         className={`sticky top-0 z-50 w-full transition-all duration-200 ${
+            scrolled
+               ? "bg-white/95 backdrop-blur-md border-b border-zinc-100 shadow-sm"
+               : "bg-white border-b border-zinc-100"
+         }`}
+      >
+         <nav className="max-w-[1100px] mx-auto px-6 h-16 flex items-center justify-between">
+            <Link href="/" className="text-xl font-bold text-zinc-900 tracking-tight">
+               Coursite<span className="text-blue-600">.</span>
+            </Link>
 
-               {/* Desktop Navigation */}
-               <div className="hidden md:flex items-center space-x-8">
-                  <div className="relative group">
-                     <button className="flex items-center space-x-1 text-gray-600 hover:text-gray-900">
-                        <span>Courses</span>
-                        <ChevronDown className="w-4 h-4" />
-                     </button>
-                     <div className="absolute top-full -left-4 w-48 bg-white border border-gray-100 rounded-lg shadow-lg py-2 hidden group-hover:block">
-                        <a
-                           href="#"
-                           className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
-                        >
-                           Web Development
-                        </a>
-                        <a
-                           href="#"
-                           className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
-                        >
-                           Design
-                        </a>
-                        <a
-                           href="#"
-                           className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50"
-                        >
-                           Business
-                        </a>
-                     </div>
-                  </div>
-                  <Link
-                     href="/teaching"
-                     className="text-gray-600 hover:text-gray-900"
-                  >
-                     Teach
-                  </Link>
-                  <Link
-                     href="/community"
-                     className="text-gray-600 hover:text-gray-900"
-                  >
-                     Community
-                  </Link>
-                  <Link
-                     href="/about"
-                     className="text-gray-600 hover:text-gray-900"
-                  >
-                     About
-                  </Link>
-               </div>
-
-               {user ? (
-                  <Link
-                     href="/dashboard"
-                     className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
-                  >
-                     Dashboard
-                  </Link>
-               ) : (
-                  <div className="hidden md:flex items-center space-x-4">
-                     <Link
-                        href="/login"
-                        className="text-gray-600 hover:text-gray-900"
-                     >
-                        Login
-                     </Link>
-                     <Link
-                        href="/register"
-                        className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
-                     >
-                        Sign Up
-                     </Link>
-                  </div>
-               )}
-               {/* Auth Buttons */}
-
-               {/* Mobile Menu Button */}
-               <button
-                  className="md:hidden"
-                  onClick={() => setIsOpen(!isOpen)}
-               >
-                  {isOpen ? (
-                     <X className="w-6 h-6 text-gray-600" />
-                  ) : (
-                     <Menu className="w-6 h-6 text-gray-600" />
-                  )}
-               </button>
+            <div className="hidden md:flex items-center gap-8">
+               <Link href="/teaching" className="text-sm text-zinc-500 hover:text-zinc-900 transition-colors font-medium">
+                  Teach
+               </Link>
+               <Link href="/learning-path" className="text-sm text-zinc-500 hover:text-zinc-900 transition-colors font-medium">
+                  Learning Paths
+               </Link>
+               <Link href="/community" className="text-sm text-zinc-500 hover:text-zinc-900 transition-colors font-medium">
+                  Community
+               </Link>
+               <Link href="/about" className="text-sm text-zinc-500 hover:text-zinc-900 transition-colors font-medium">
+                  About
+               </Link>
             </div>
 
-            {/* Mobile Menu */}
-            {isOpen && (
-               <div className="md:hidden mt-4 pb-4">
-                  <a
-                     href="#"
-                     className="block py-2 text-gray-600 hover:text-gray-900"
-                  >
-                     Courses
-                  </a>
-                  <Link
-                     href="/teaching"
-                     className="block py-2 text-gray-600 hover:text-gray-900"
-                  >
-                     Teach
+            {user ? (
+               <Link
+                  href="/dashboard"
+                  className="hidden md:inline-flex bg-zinc-900 text-white text-sm px-4 py-2 rounded-lg font-medium hover:bg-zinc-700 transition-colors"
+               >
+                  Dashboard
+               </Link>
+            ) : (
+               <div className="hidden md:flex items-center gap-3">
+                  <Link href="/login" className="text-sm text-zinc-500 hover:text-zinc-900 font-medium transition-colors">
+                     Log in
                   </Link>
                   <Link
-                     href="/community"
-                     className="block py-2 text-gray-600 hover:text-gray-900"
+                     href="/register"
+                     className="bg-zinc-900 text-white text-sm px-4 py-2 rounded-lg font-medium hover:bg-zinc-700 transition-colors"
                   >
-                     Community
+                     Get started
                   </Link>
-                  <Link
-                     href="/about"
-                     className="block py-2 text-gray-600 hover:text-gray-900"
-                  >
-                     About
-                  </Link>
-                  <div className="mt-4 space-y-2">
-                     <a
-                        href="/login"
-                        className="block w-full text-center py-2 text-gray-600 hover:text-gray-900"
-                     >
-                        Login
-                     </a>
-                     <a
-                        href="/signup"
-                        className="block w-full text-center bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
-                     >
-                        Sign Up
-                     </a>
-                  </div>
                </div>
             )}
+
+            <button
+               className="md:hidden text-zinc-600 hover:text-zinc-900"
+               onClick={() => setIsOpen(!isOpen)}
+               aria-label="Toggle menu"
+            >
+               {isOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
          </nav>
+
+         {isOpen && (
+            <div className="md:hidden border-t border-zinc-100 bg-white px-6 py-4 space-y-1">
+               {[
+                  { href: "/teaching", label: "Teach" },
+                  { href: "/learning-path", label: "Learning Paths" },
+                  { href: "/community", label: "Community" },
+                  { href: "/about", label: "About" },
+               ].map((link) => (
+                  <Link
+                     key={link.href}
+                     href={link.href}
+                     className="block py-2 text-sm text-zinc-600 hover:text-zinc-900 font-medium"
+                     onClick={() => setIsOpen(false)}
+                  >
+                     {link.label}
+                  </Link>
+               ))}
+               <div className="pt-3 flex flex-col gap-2 border-t border-zinc-100 mt-2">
+                  <Link href="/login" className="text-sm text-center text-zinc-600 py-2 font-medium">
+                     Log in
+                  </Link>
+                  <Link
+                     href="/register"
+                     className="text-sm text-center bg-zinc-900 text-white py-2 rounded-lg font-medium"
+                  >
+                     Get started
+                  </Link>
+               </div>
+            </div>
+         )}
       </header>
    );
 };

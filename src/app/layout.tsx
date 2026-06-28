@@ -1,176 +1,117 @@
 "use client";
 import Header from "@/components/SharedUi/Header";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "./globals.css";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { useRouter } from "next/navigation";
-import userState from "@/actions/userActions";
 import { useEffect, useState } from "react";
 import { getSession } from "next-auth/react";
+import Link from "next/link";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
    const [user, setUser] = useState(null);
-
    const router = useRouter();
 
    useEffect(() => {
       async function getUser() {
          const session = await getSession();
-         if (session?.user) {
-            setUser(session?.user);
-         }
+         if (session?.user) setUser(session?.user);
       }
-
       getUser();
    }, []);
 
    useEffect(() => {
-      if (user) {
-         router.push("/dashboard");
-      }
+      if (user) router.push("/dashboard");
    }, [user]);
+
    return (
       <html lang="en">
          <body>
             {!user && <Header />}
-
             <div>{children}</div>
 
             {!user && (
-               <footer className="bg-gray-900 text-white">
-                  <div className="container mx-auto px-6 py-12">
-                     <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-                        {/* Brand */}
-                        <div className="space-y-4">
-                           <h3 className="text-2xl font-bold">LearnHub</h3>
-                           <p className="text-gray-400">
-                              Empowering learners worldwide with free educational resources.
+               <footer className="bg-zinc-950 text-white">
+                  <div className="max-w-[1100px] mx-auto px-6 py-16">
+                     <div className="grid grid-cols-1 md:grid-cols-4 gap-12 pb-12 border-b border-zinc-800">
+                        <div className="md:col-span-1 space-y-4">
+                           <Link href="/" className="text-xl font-bold tracking-tight">
+                              Coursite<span className="text-blue-500">.</span>
+                           </Link>
+                           <p className="text-zinc-400 text-sm leading-relaxed">
+                              Empowering learners worldwide with free, high-quality educational resources.
                            </p>
-                           <div className="flex space-x-4">
-                              <a
-                                 href="#"
-                                 className="text-gray-400 hover:text-white"
-                              >
-                                 Twitter
-                              </a>
-                              <a
-                                 href="#"
-                                 className="text-gray-400 hover:text-white"
-                              >
-                                 LinkedIn
-                              </a>
-                              <a
-                                 href="#"
-                                 className="text-gray-400 hover:text-white"
-                              >
-                                 Facebook
-                              </a>
+                           <div className="flex gap-4 pt-1">
+                              {["Twitter", "LinkedIn", "GitHub"].map((s) => (
+                                 <a key={s} href="#" className="text-zinc-500 hover:text-white text-sm transition-colors">
+                                    {s}
+                                 </a>
+                              ))}
                            </div>
                         </div>
 
-                        {/* Quick Links */}
                         <div>
-                           <h4 className="text-lg font-semibold mb-4">Quick Links</h4>
-                           <ul className="space-y-2">
-                              <li>
-                                 <a
-                                    href="#"
-                                    className="text-gray-400 hover:text-white"
-                                 >
-                                    Find Courses
-                                 </a>
-                              </li>
-                              <li>
-                                 <a
-                                    href="#"
-                                    className="text-gray-400 hover:text-white"
-                                 >
-                                    Become an Instructor
-                                 </a>
-                              </li>
-                              <li>
-                                 <a
-                                    href="/learning-path"
-                                    className="text-gray-400 hover:text-white"
-                                 >
-                                    Learning Path
-                                 </a>
-                              </li>
-                              <li>
-                                 <a
-                                    href="/success-stories"
-                                    className="text-gray-400 hover:text-white"
-                                 >
-                                    Success Stories
-                                 </a>
-                              </li>
+                           <p className="text-xs font-semibold text-zinc-500 uppercase tracking-widest mb-4">Learn</p>
+                           <ul className="space-y-3">
+                              {[
+                                 { label: "Browse Courses", href: "#" },
+                                 { label: "Learning Paths", href: "/learning-path" },
+                                 { label: "Success Stories", href: "/success-stories" },
+                                 { label: "Community", href: "/community" },
+                              ].map((l) => (
+                                 <li key={l.label}>
+                                    <Link href={l.href} className="text-sm text-zinc-400 hover:text-white transition-colors">
+                                       {l.label}
+                                    </Link>
+                                 </li>
+                              ))}
                            </ul>
                         </div>
 
-                        {/* Support */}
                         <div>
-                           <h4 className="text-lg font-semibold mb-4">Support</h4>
-                           <ul className="space-y-2">
-                              <li>
-                                 <a
-                                    href="#"
-                                    className="text-gray-400 hover:text-white"
-                                 >
-                                    Help Center
-                                 </a>
-                              </li>
-                              <li>
-                                 <a
-                                    href="/contact"
-                                    className="text-gray-400 hover:text-white"
-                                 >
-                                    Contact Us
-                                 </a>
-                              </li>
-                              <li>
-                                 <a
-                                    href="/faq"
-                                    className="text-gray-400 hover:text-white"
-                                 >
-                                    FAQ
-                                 </a>
-                              </li>
-                              <li>
-                                 <a
-                                    href="#"
-                                    className="text-gray-400 hover:text-white"
-                                 >
-                                    Terms of Service
-                                 </a>
-                              </li>
+                           <p className="text-xs font-semibold text-zinc-500 uppercase tracking-widest mb-4">Teach</p>
+                           <ul className="space-y-3">
+                              {[
+                                 { label: "Become an Instructor", href: "/teaching" },
+                                 { label: "Course Builder", href: "/dashboard" },
+                                 { label: "Instructor FAQ", href: "/faq" },
+                              ].map((l) => (
+                                 <li key={l.label}>
+                                    <Link href={l.href} className="text-sm text-zinc-400 hover:text-white transition-colors">
+                                       {l.label}
+                                    </Link>
+                                 </li>
+                              ))}
                            </ul>
                         </div>
 
-                        {/* Newsletter */}
                         <div>
-                           <h4 className="text-lg font-semibold mb-4">Stay Updated</h4>
-                           <p className="text-gray-400 mb-4">
-                              Subscribe to our newsletter for the latest updates and courses.
-                           </p>
-                           <form className="space-y-2">
-                              <input
-                                 type="email"
-                                 placeholder="Enter your email"
-                                 className="w-full px-4 py-2 rounded-lg bg-gray-800 border border-gray-700 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                              />
-                              <button
-                                 type="submit"
-                                 className="w-full bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700"
-                              >
-                                 Subscribe
-                              </button>
-                           </form>
+                           <p className="text-xs font-semibold text-zinc-500 uppercase tracking-widest mb-4">Company</p>
+                           <ul className="space-y-3">
+                              {[
+                                 { label: "About Us", href: "/about" },
+                                 { label: "Contact", href: "/contact" },
+                                 { label: "FAQ", href: "/faq" },
+                                 { label: "Terms of Service", href: "#" },
+                              ].map((l) => (
+                                 <li key={l.label}>
+                                    <Link href={l.href} className="text-sm text-zinc-400 hover:text-white transition-colors">
+                                       {l.label}
+                                    </Link>
+                                 </li>
+                              ))}
+                           </ul>
                         </div>
                      </div>
 
-                     <div className="border-t border-gray-800 mt-12 pt-8 text-center text-gray-400">
-                        <p>&copy; {new Date().getFullYear()} Coursite. All rights reserved.</p>
+                     <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+                        <p className="text-sm text-zinc-500">
+                           &copy; {new Date().getFullYear()} Coursite. All rights reserved.
+                        </p>
+                        <div className="flex gap-6">
+                           <a href="#" className="text-sm text-zinc-500 hover:text-white transition-colors">Privacy</a>
+                           <a href="#" className="text-sm text-zinc-500 hover:text-white transition-colors">Terms</a>
+                           <a href="#" className="text-sm text-zinc-500 hover:text-white transition-colors">Cookies</a>
+                        </div>
                      </div>
                   </div>
                </footer>
